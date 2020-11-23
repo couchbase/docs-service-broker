@@ -1,0 +1,38 @@
+= Reference
+
+[abstract]
+This section describes low-level technical details about data structures and algorithms of the Service Broker.
+
+ifdef::env-github[]
+:relfileprefix: ../
+:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
+endif::[]
+
+The xref:concepts/index.adoc[concepts] section gives a broad, high-level, overview of what the Service Broker can do, how the Service Broker functions and how to use it.
+This section digs into the finer details and gives a full description of all available features.
+
+These are broadly separated into a number of categories:
+
+.Kubernetes Data Types
+
+These reference topics describe Kubernetes custom resource types defined by the Service Broker.
+
+* xref:reference/servicebrokerconfigs.adoc[ServiceBrokerConfig Resource Reference]
+
+.Dynamic Attributes
+
+These reference topics describe dynamic attribute functions available to Service Broker configuration.
+
+* xref:reference/template-functions.adoc[Dynamic Attribute Function Reference]
+
+.Docker and Container Images
+
+These reference topics describe the use of Service Broker container images.
+
+* xref:reference/container.adoc[Service Broker Container Reference]
+
+.Open Service Broker API
+
+These reference topics describe Service Broker specific behavior within the bounds of the Open Service Broker API.
+
+* xref:reference/osb-api.adoc[Open Service Broker API Reference]

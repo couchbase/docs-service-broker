@@ -1,0 +1,27 @@
+= Concepts
+
+[abstract]
+This section describes core concepts to consider when configuring and deploying your services.
+
+ifdef::env-github[]
+:relfileprefix: ../
+:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
+endif::[]
+
+The Service Broker has been designed in a way so that no application specific knowledge is hard coded within it.
+This allows service configurations to be _completely_ under the control of the Service Broker administrator, and without requiring any code changes.
+
+While a cursory glance at one of the example configuration profiles may seem daunting, the core concepts are actually relatively simple.
+This section aims to guide the reader through the core concepts of the Service Broker so you can configure and deploy your own services quickly and easily.
+
+It is recommended all users read and fully understand this entire section.
+
+== Next Steps
+
+* xref:concepts/architecture.adoc[Architecture]
+* xref:concepts/catalog.adoc[Service Catalog]
+* xref:concepts/bindings.adoc[Configuration Bindings]
+* xref:concepts/templates.adoc[Configuration Templates]
+* xref:concepts/dynamic-attributes.adoc[Dynamic Attributes]
+* xref:concepts/registry.adoc[Service Instance and Binding Registries]
+* xref:concepts/security.adoc[Security Models]

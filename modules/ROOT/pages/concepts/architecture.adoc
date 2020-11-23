@@ -1,0 +1,130 @@
+= Architecture
+
+[abstract]
+This page describes the core Service Broker architecture.
+
+ifdef::env-github[]
+:relfileprefix: ../
+:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
+endif::[]
+
+The Service Broker implements the https://www.openservicebrokerapi.org/[Open Service Broker API^].
+In summary, the Open Service Broker API specification defines two key resource types; <<service-instances,service instances>> and <<service-bindings, service bindings>>.
+Like the specification itself, the Service Broker also takes to heart the concept that a service is an abstract thing; a service represents any API driven application that can be consumed by a client.
+Let's first begin by understanding the key terminology.
+
+== Open Service Broker API Concepts
+
+[#service-instances]
+=== Service Instances
+
+A service instance is a single, unique, instance of some service.
+This service could be anything; a database, a VOIP server, a web application.
+The key point here is that end users see a service instance, they do not see nor care about the underlying implementation--it is abstracted away.
+Thus a complex application that consists of a collection of inter-connected micro-services and databases, can just be considered as an application by the end user.
+
+The API for a service instance is, however, somewhat limited.
+Upon successful creation of a service instance, the API only defines a dashboard URL.
+If all that is required to consume a service is a URL, then a service instance is all you need.
+If however your clients need more--such as credentials or non-standard connection strings--then you need <<service-bindings, service bindings>>.
+
+It may be the case that service instances are provisioned with pre-shared credentials, or they use a centralized authentication mechanism in which case service bindings are not necessary.
+
+.Service Instance Backed by Directory Service for Authentication
+image::osb-arch-nobinding.png[align="center"]
+
+[#service-bindings]
+=== Service Bindings
+
+Service bindings are best thought of as resources and credentials for a shared service instance.
+Take for example a secure web service, a service instance can tell you where to connect to, however you need a service binding to communicate the username, password and TLS configuration to a client.
+
+A service binding may also represent a partitioning of the service instance.
+In a multi-tenancy system you may wish to have each service binding refer to a unique namespace so that other users sharing the instance cannot interfere with one another.
+
+.Service Instance with Binding per User
+image::osb-arch-multitenant.png[align="center"]
+
+A service binding may also return the same credentials no matter how many are created.
+This facilitates sharing of the underlying service instance.
+
+.Service Instance with Binding Shared by Multiple Users
+image::osb-arch-shared.png[align="center"]
+
+[#service-catalog]
+=== Service Catalog
+
+Users of an Open Service Broker compliant API can create and delete service instances and bindings as they desire.
+The service catalog is responsible for providing a service offering discovery mechanism.
+
+Users of an Open Service Broker can poll it an request a catalog of supported services.
+These are organized, first as a collection of service offerings, then within each service offering a collection of plans.
+
+One way to help visualize this is to think in terms of virtual machine (VM) types offered by a cloud provider.
+VMs are typically first defined in terms of what characteristics they have (e.g. high CPU, high memory, high I/O), and then by sizes (e.g. 2 CPUs, 4 CPUs, 8 CPUs).
+The characteristics are defined by the service offering, the sizes by the plan.
+
+The service catalog further reinforces the concept of service abstraction.
+I, as an end user, no longer care about how things are configured or how big they are in terms of instances.
+What matters to me is my service is production grade and handles my workload.
+
+=== API Concepts Summary
+
+The beauty of service instances and bindings is that they are flexible.
+There is no rigid definition of what physical things a service instance or binding maps to.
+In the next section we will see how the Service Broker performs these mappings.
+
+== Service Broker Concepts
+
+When a service instance or binding is created by the Service Broker, all it is doing is creating a set of pre-defined Kubernetes resources.
+
+=== Dynamic Kubernetes Resource Provisioning
+
+Take for instance the creation of a web application.
+It may need Kubernetes `ServiceAccount`, `Role`, `RoleBinding`, `Deployment` and `Service` resources in order to create a consumable service.
+Each of these resources is represented in the Service Broker configuration as a xref:concepts/templates.adoc[resource template].
+Templates are xref:concepts/bindings.adoc[bound] to a service offering and plan in the catalog.
+Thus when you create a service instance of the web application, all the broker does is lookup the set of templates associated with the service offering and plan then dynamically create then in Kubernetes.
+
+The Service Broker contains no knowledge of any Kubernetes types.
+By treating every resource template as generic and untyped it will work with any Kubernetes resource type, both core types and custom.
+
+.Service Instance Creation Bound to Resource Templates
+image::sb-binding.png[align="center"]
+
+=== Templated Resources
+
+If the Service Broker only created static resources, then it would be impossible to create multiple service instances in the same namespace--they would create the same resources, with the same name, and conflict.
+This is why the Service Broker uses templates and not resources.
+
+Templates are modeled on JSON objects--all Kubernetes resources are JSON objects--as this allows the structure to be validated before being accepted.
+Individual resource templates may be customized before creation with dynamic attributes.
+For example, resource names can be dynamically modified to be based on the unique service instance ID, and therefore be guaranteed not to conflict with one another.
+
+Dynamic attributes are based on the Go language https://golang.org/pkg/text/template/[template^] specification.
+This will be familiar to users of Helm, however, the key difference is that the Service Broker applies structured JSON data to a structured JSON template.
+Helm operates on YAML text files, where white space is a concern.
+
+.JSON Template Parameterized with Dynamic Attributes
+image::sb-templates.png[align="center"]
+
+=== Dynamic Attributes
+
+Template customization is provided by a number of different data sources.
+
+The xref:concepts/registry.adoc[registry] is a key/value database that is pre-populated with metadata associated with the service instance or binding (e.g. unique ID, namespace).
+Registry values can also be user defined for later retrieval by processing a Go language template.
+
+Customization values can also be generated by generic functions.
+These allow simple operations such as string formatting or password generation.
+They also allow more complex functionality such as generating cryptographic keys and certificates.
+
+The Open Service Broker API also allows parameters to be specified when a service instance or binding is created.
+Customizations can also refer to these parameters explicitly passed by the user.
+
+== Next Steps
+
+The first Service Broker API the end user will interact with will be the service catalog.
+The next page will outline what the service catalog provides and how it can be configured to suit your needs.
+
+* xref:concepts/catalog.adoc[Service Catalog]

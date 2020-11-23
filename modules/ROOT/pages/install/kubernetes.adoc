@@ -1,0 +1,156 @@
+= Creating the Service Broker Service
+
+[abstract]
+This page describes how to install the Service Broker into your Kubernetes cluster.
+
+ifdef::env-github[]
+:relfileprefix: ../
+:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
+endif::[]
+
+Installation is divided into a number of steps.
+The Service Broker comes with different configurations that define what service will be created by the Service Broker and what permissions it requires to do so.
+A configuration will be installed first, followed by the generic Service Broker deployment, then finally it will be registered with the Kubernetes Service Catalog.
+
+.Environment Requirements
+[IMPORTANT]
+====
+This tutorial--and, in fact, all examples--assume you are using the `default` namespace.
+Due to explicit `default` namespace references in role bindings and TLS certificates, this tutorial will not work with any other namespace.
+====
+
+== Install CRDs
+
+The Service Broker is configured using a Kubernetes Custom Resource that allows type checking of your configurations and must be installed first:
+
+[source,console]
+----
+$ kubectl create -f https://raw.githubusercontent.com/couchbase/service-broker/master/crds/servicebroker.couchbase.com_servicebrokerconfigs.yaml
+----
+
+== Install a Configuration
+
+Example configurations are available through https://github.com/couchbase/service-broker/tree/master/examples/configurations[GitHub^].
+For the purposes of this demonstration, we will use Couchbase Server:
+
+[source,console]
+----
+$ kubectl create -f https://raw.githubusercontent.com/couchbase/service-broker/master/examples/configurations/couchbase-server/broker.yaml
+role.rbac.authorization.k8s.io/couchbase-service-broker created
+servicebrokerconfig.servicebroker.couchbase.com/couchbase-service-broker created
+----
+
+.Schema Validation
+[TIP]
+====
+At this point, the Kubernetes API may reject the `ServiceBrokerConfig` resource if you have have made any modifications.
+Errors will be based on the https://swagger.io/docs/specification/data-models/[OpenAPI schema specification^].
+====
+
+.Licensing and Prerequisite Requirements
+[IMPORTANT]
+====
+The Couchbase Server configuration uses the https://www.couchbase.com/products/cloud/kubernetes[Couchbase Autonomous Operator^] to provision service instances.
+Use of the Couchbase Autonomous Operator is governed by the https://www.couchbase.com/LA11122019[Couchbase License Agreement Version 7^].
+
+The Couchbase Server configuration requires the installation of custom resource definitions, and a dynamic admission controller to provide defaults to custom resource attributes.
+The Service Broker examples use a namespace-scoped role and cannot create the cluster-scoped resources required.
+You will need to manually https://docs.couchbase.com/operator/2.0/install-kubernetes.html[install the CRDs and dynamic admission controller^] before proceeding.
+
+CRDs should be installed before the Service Broker is started in order to correctly cache any required resource types from the Kubernetes discovery API.
+The Kubernetes discovery API will, however, be polled on a regular basis to refresh this cache and register CRD addition, update or deletion during the Service Broker lifetime.
+====
+
+== Install the Service Broker Service
+
+The Service Broker is installed with a single configuration file.
+By default, this will use the `latest` official Docker Hub image.
+If you want to use a specific version, first download the file then edit the image tag in the `Deployment` resource.
+Likewise, if you are using a non-standard container image name you will have to perform the same modifications.
+
+To install the Service Broker run the following:
+
+[source,console]
+----
+$ kubectl create -f https://raw.githubusercontent.com/couchbase/service-broker/master/examples/broker.yaml
+serviceaccount/couchbase-service-broker created
+rolebinding.rbac.authorization.k8s.io/couchbase-service-broker created
+secret/couchbase-service-broker created
+deployment.apps/couchbase-service-broker created
+service/couchbase-service-broker created
+----
+
+The `ServiceAccount` the Service Broker runs as is bound to the `Role` we created in the previous step.
+A `Secret` contains the TLS configuration and bearer token for authentication as the Service Broker is secure by default.
+The `Deployment` creates the Service Broker and ensures it is highly available and a `Service` makes it discoverable by the Kubernetes Service Catalog in the next step.
+
+As it is a regular deployment with a readiness probe, you can check that the Service Broker is up and running with the following command:
+
+[source,console]
+----
+$ kubectl get deployments
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+couchbase-service-broker       1/1     1            1           17s
+----
+
+Alternatively, you can wait for the `Deployment` to become available:
+
+[source,console]
+----
+$ kubectl wait --for=condition=Available deployment/couchbase-service-broker
+deployment.extensions/couchbase-service-broker condition met
+----
+
+.Service Broker Validation
+[TIP]
+====
+The Service Broker does not use a dynamic admission controller to validate the configuration at present.
+It does, however, perform validation internally and report this back to the user through a status in the configuration resource.
+If you have made a configuration error, the Service Broker `Deployment` will not become ready.
+You can see the validation status directly through the CLI:
+
+[source,console]
+----
+$ kubectl get servicebrokerconfigs
+NAME                       VALID   AGE
+couchbase-service-broker   True    9m
+----
+
+If you have a configuration error, you can examine this in more detail with the following command:
+
+[source,console]
+----
+$ kubectl describe servicebrokerconfigs
+Status:
+  Conditions:
+    Last Transition Time:  2020-04-06T15:51:17Z
+    Message:               template 'couchbase-operator-rolebinding', referenced by binding 'couchbase-developer-private' service instance, must exist
+    Reason:                ValidationFailed
+    Status:                False
+    Type:                  ConfigurationValid
+----
+====
+
+== Register the Service Broker with the Service Catalog
+
+The final step is to tell the Kubernetes Service Catalog about our Service Broker.
+Again this is done with a single configuration file:
+
+[source,console]
+----
+$ kubectl create -f https://raw.githubusercontent.com/couchbase/service-broker/master/examples/clusterservicebroker.yaml
+clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
+----
+
+If this is successful, it will appear as `Ready`:
+
+[source,console]
+----
+$ kubectl get clusterservicebrokers
+NAME                       URL                                            STATUS   AGE
+couchbase-service-broker   https://couchbase-service-broker.default.svc   Ready    2s
+----
+
+== Next Steps
+
+* xref:install/serviceinstance.adoc[Creating and Binding to a Service Instance]

@@ -1,0 +1,80 @@
+= ServiceBrokerConfig Resource Reference
+
+[abstract]
+This page describes all fields in the ServiceBrokerConfig Kubernetes resource.
+
+ifdef::env-github[]
+:relfileprefix: ../
+:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
+endif::[]
+
+The `ServiceBrokerConfig` resource is required by each instance of the Service Broker.
+Each Service Broker instance requires exactly one `ServiceBrokerConfig` resource.
+
+Documentation is provided by the resource custom resource definition.
+To read documentation about the resource, use the following command:
+
+[source,console]
+----
+kubectl explain servicebrokerconfig
+KIND:     ServiceBrokerConfig
+VERSION:  servicebroker.couchbase.com/v1alpha1
+
+DESCRIPTION:
+     <empty>
+
+FIELDS:
+   apiVersion	<string>
+     APIVersion defines the versioned schema of this representation of an
+     object. Servers should convert recognized schemas to the latest internal
+     value, and may reject unrecognized values. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+
+   kind	<string>
+     Kind is a string value representing the REST resource this object
+     represents. Servers may infer this from the endpoint the client submits
+     requests to. Cannot be updated. In CamelCase. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+
+   metadata	<Object>
+     Standard object's metadata. More info:
+     https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#metadata
+
+   spec	<Object> -required-
+     ServiceBrokerConfigSpec defines the top level service broker configuration
+     data structure.
+
+   status	<Object>
+     ServiceBrokerConfigStatus records status information about a configuration
+     as the Service Broker processes it.
+----
+
+You can read documentation about nested attributes by specifying a JSON path, for example:
+
+[source,console]
+----
+$ kubectl explain servicebrokerconfig.spec.bindings.serviceBinding
+KIND:     ServiceBrokerConfig
+VERSION:  servicebroker.couchbase.com/v1alpha1
+
+RESOURCE: serviceBinding <Object>
+
+DESCRIPTION:
+     ServiceBinding defines the set of templates to render and create when a new
+     service binding is created. This attribute is optional based on whether the
+     service plan allows binding.
+
+FIELDS:
+   readinessChecks	<[]Object>
+     ReadinessChecks defines a set of tests that define whether a service
+     instance or service binding is actually ready as reported by the service
+     broker polling API.
+
+   registry	<[]Object>
+     Registry allows the pre-calculation of dynamic configuration from request
+     inputs i.e. registry or parameters, or generated e.g. passwords.
+
+   templates	<[]string>
+     Templates defines all the templates that will be created, in order, by the
+     service broker for this operation.
+----
