@@ -9,15 +9,17 @@ ifdef::env-github[]
 endif::[]
 
 The Service Broker is just a simple web-service that creates Kubernetes resources on demand as requested by the API.
-This Getting Started tutorial will take you through the following steps to install and get started with Couchbase Service Broker on Kubernetes:
+This tutorial will walk you through the steps to install and get started with Couchbase Service Broker on Kubernetes.
 
-. Prerequisites
-. Download packages
-. Install Couchbase Service Broker
-. Create Couchbase Cluster
-. Register the service and create your first service instance.
+////
+. <<prerequisites>>
+. <<download-pkgs>>
+. <<install-service-broker>>
+. <<provision-cb-cluster-service>>
+. <<bind-to-provisioned-service>>
+////
 
-
+[#prerequisites]
 == Prerequisites
 
 This page details the platform and software requirements for running the Service Broker.
@@ -41,12 +43,14 @@ As the Service Broker is standards based, any version of the Service Catalog sup
 
 Install Operator from xref:operator:install-kubernetes.adoc[here].
 
+[#download-pkgs]
 == Package Downloads 
 
 Download Couchbase Service Broker https://www.couchbase.com/downloads[package] and unpack on the same computer where you normally run kubectl.
 
 The Couchbase Service Broker package contains YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
 
+[#install-service-broker]
 == Install Couchbase Service Broker
 
 IMPORTANT: After you unpack the downloaded package, the resulting directory will be titled something like couchbase-service-broker_x.x.x. Make sure to `cd` into this directory before you run the remaining commands in this guide.
@@ -96,9 +100,8 @@ The final step is to tell the Kubernetes Service Catalog about our Service Broke
 $ kubectl create -f clusterservicebroker.yaml
 ----
 
-== Create Couchbase Cluster
-
-=== Provision the Couchbase Cluster Service:
+[#provision-cb-cluster-service]
+== Provision the Couchbase Cluster Service:
 
 [source,console]
 ----
@@ -107,7 +110,8 @@ $ svcat provision csb --class couchbase-osb-service --plan csb-basic --param pas
 
 You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided.
 
-=== Bind to the Provisioned Service
+[#bind-to-provisioned-service]
+== Bind to the Provisioned Service
 
 [source,console]
 ----
