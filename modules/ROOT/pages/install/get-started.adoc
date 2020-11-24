@@ -1,0 +1,104 @@
+= Install the Couchbase Service Broker on Kubernetes
+
+== Prerequisites
+
+This page details the platform and software requirements for running the Service Broker.
+
+==== Kubernetes Cluster
+
+The following platforms are supported:
+
+•	Kubernetes 1.17+
+•	Red Hat OpenShift 4.4+
+
+In general, any Kubernetes distribution based on a supported version should work.
+
+==== Service Catalog
+
+The Service Broker is recommended for use with the Kubernetes Service Catalog.
+Installation instructions can be found in the official documentation.
+As the Service Broker is standards based, any version of the Service Catalog supporting the Open Service Broker API version 2.13+ is supported.
+
+==== CAO
+
+Install Operator from https://docs.couchbase.com/operator/current/install-kubernetes.html[here].
+
+== Package Downloads 
+
+Download Couchbase Service Broker https://www.couchbase.com/downloads[package] and unpack on the same computer where you normally run kubectl.
+
+The Couchbase Service Broker package contains YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
+
+== Install Couchbase Service Broker
+
+Important:
+
+After you unpack the download, the resulting directory will be titled something like couchbase-service-broker_x.x.x. Make sure to cd into this directory before you run the commands in this guide.
+
+==== Install the CRD
+
+The Service Broker is configured using a Kubernetes Custom Resource that allows type checking of your configurations and must be installed first:
+
+$ kubectl create -f crd.yaml
+
+==== Install a configuration
+
+$ kubectl create -f servicebrokerconfig.yaml
+
+==== Install the service broker service
+
+$ kubectl create -f broker.yaml
+
+The ServiceAccount the Service Broker runs as is bound to the Role we created in the previous step. A Secret contains the TLS configuration and bearer token for authentication as the Service Broker is secure by default. The Deployment creates the Service Broker and ensures it is highly available and a Service makes it discoverable by the Kubernetes Service Catalog in the next step.
+Check the status of the service broker
+
+$ kubectl get deployments
+
+NAME                          	 	READY   	UP-TO-DATE   AVAILABLE   	AGE
+
+couchbase-operator            		 1/1     		1            	1           	33m
+
+couchbase-operator-admission   		 1/1     		1                1           	37m
+
+couchbase-service-broker       		 1/1     		1            	1           	32m
+
+==== Register the service broker with the service catalog
+The final step is to tell the Kubernetes Service Catalog about our Service Broker. 
+
+$ kubectl create -f clusterservicebroker.yaml
+
+=== Create Couchbase Cluster
+
+==== Provision Couchbase Cluster Service:
+
+$ svcat provision csb --class couchbase-osb-service --plan csb-basic --param password=password --wait
+
+You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided.
+
+==== Bind to the provisioned service
+
+$ svcat bind csb
+
+Name:        csb 
+    Namespace:   default  
+    Status:               
+    Secret:      csb  
+    Instance:    csb  
+  
+  Parameters:
+    No parameters defined
+This will create a user and allow access to the bucket.  Connection string, username, password and CA certificate will be in the secret, ready to be used by a client of some variety.
+
+$ kubectl get secrets csb
+NAME   TYPE     DATA   AGE
+csb    	Opaque       5      7m58s
+
+
+To access the couchbase cluster UI console, 
+
+$ kubectl port-forward couchbase-instance-winhhoku-0000 8091
+
+Go to http://localhost:8091
+login with username as Administrator & password as password
+
+Here is Example of Deploying couchbase cluster on local with Couchbase Service Broker from scratch.
