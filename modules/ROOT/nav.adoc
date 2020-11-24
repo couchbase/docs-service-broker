@@ -1,13 +1,7 @@
 .xref:index.adoc[Service Broker Home]
 
 * xref:install/get-started.adoc[Getting Started]
-////
-** xref:install/prerequisites.adoc[Prerequisites]
-** xref:install/packages.adoc[Package Downloads]
-** xref:install/container.adoc[Creating Container Images]
-** xref:install/kubernetes.adoc[Creating the Service Broker Service]
-** xref:install/serviceinstance.adoc[Creating and Binding to a Service Instance]
-////
+** Example: Service Broker and Minikube
 
 * xref:concepts/index.adoc[Concepts]
 ** xref:concepts/architecture.adoc[Architecture]
