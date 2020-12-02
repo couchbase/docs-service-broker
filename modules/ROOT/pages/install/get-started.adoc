@@ -41,7 +41,8 @@ As the Service Broker is standards based, any version of the Service Catalog sup
 
 === Couchbase Autonomous Operator
 
-Install Operator from xref:operator:install-kubernetes.adoc[here].
+Install the Operator CRDs, dynamic admission controller and Operator as documented xref:operator:install-kubernetes.adoc[here].
+For this guide, the Operator must be deployed at the cluster scope, not the default namespaced scope.
 
 [#download-pkgs]
 == Package Downloads 
@@ -73,12 +74,40 @@ $ kubectl create -f servicebrokerconfig.yaml
 
 === Install the Service Broker Service
 
+[NOTE]
+====
+For users of Red Hat OpenShift, you can use the base Kubernetes download package and images.
+The Service Broker is a statically compiled binary, so does not need an entire Red Hat Enterprise Linux base image.
+It is safer to use the Kubernetes image as it contains fewer security vulnerabilities.
+You may be required to use the Red Hat images for policy compliance, for example.
+
+If you choose to use the OpenShift download package may need to modify the following `broker.yaml` configuration and alter the following, depending on your environment:
+
+* You may need to create a Docker secret in the namespace into which you deploy the Service Broker, in order to authenticate against the Red Hat Container Registry, and pull the image.
+  This secret needs to be added to the `couchbase-service-broker` service account's image pull secrets in order to pass the privileges on to the Service Broker deployment.
+====
+
 [source,console]
 ----
 $ kubectl create -f broker.yaml
 ----
 
-The ServiceAccount the Service Broker runs as is bound to the Role we created in the previous step. A Secret contains the TLS configuration and bearer token for authentication as the Service Broker is secure by default. The Deployment creates the Service Broker and ensures it is highly available and a Service makes it discoverable by the Kubernetes Service Catalog in the next step.
+The ServiceAccount the Service Broker runs as is bound to the Role we created in the previous step. A Secret contains the TLS configuration and bearer token for authentication as the Service Broker is secure by default.
+
+[NOTE]
+====
+If you wish to deploy the Service Broker in a namespace other than `default`, you will need to manually generate TLS certificates.
+Your CA certificate must be installed in the `couchbase-service-broker` cluster service broker, defined in `clusterservicebroker.yaml`.
+Your server certificate or certificate chain, and private key, must be installed in the `couchbase-service-broker` secret, defined in `broker.yaml`.
+The server certificate must have a subject alternative name (SAN) valid for the service broker service.
+
+For example, if the service broker service is called `couchbase-service-broker` and it will be installed in the `foo` namespace, then your server certificate should have a DNS SAN valid for `couchbase-service-broker.foo.svc`.
+
+Finally, you must update any resources references to the `default` namespace, to `foo`.
+These can be found in the `couchbase-service-broker` cluster role binding defined in `broker.yaml` and the `couchbase-service-broker` cluster service broker defined in `clusterservicebroker.yaml`.
+====
+
+The Deployment creates the Service Broker and ensures it is highly available and a Service makes it discoverable by the Kubernetes Service Catalog in the next step.
 Check the status of the service broker
 
 [source,console]
