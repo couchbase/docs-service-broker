@@ -1,36 +1,30 @@
 = Release Notes for Couchbase Service Broker 1.0
 
-Couchbase Service Broker 1.0 provides the first native integration of Couchbase Autonomous Operator with Open Service Broker API for Open Source Kubernetes platform.
+Couchbase Service Broker 1.0 provides the first native integration of Couchbase Autonomous Operator with Open Service Broker API for the Open Source Kubernetes platform.
 
-Couchbase Service Broker 1.0 provides a service class named as 'couchbase-osb-service' with 2 Service Plans – 'csb-basic' and 'csb-standard' (with the regular Couchbase Server Enterprise subscription), that will work with any version of Operator (We recommend using Operator 2.1).
+Couchbase Service Broker 1.0 provides a service class named _couchbase-osb-service_ with two service plans: `csb-basic` and `csb-standard` (with the regular Couchbase Server Enterprise subscription), that will work with any version of Couchbase Autonomous Operator. However, we recommend using Couchbase Autonomous Operator version 2.1.
 
-Take a look at the https://docs.couchbase.com/service-broker/1.0/index.html[+++Getting Started+++] page to learn about Couchbase Service Broker in detail.
+Take a look at the xref:service-broker::index.adoc[Getting Started] page to learn about Couchbase Service Broker in detail.
 
-=== *Platform Support*
+== Platform Support
 
-For the latest platform support information, see https://docs-staging.couchbase.com/service-broker/1.0/install/get-started.html#prerequisites[Prerequisites].
+Couchbase Service Broker 1.0 is supported only on the Open Source Kubernetes platform including AWS EKS, Azure AKS, and Google GKE.
 
-=== *Known Issues or Limitations*
+For the latest platform support information, see xref:install/get-started.adoc#prerequisites[Prerequisites].
 
-* {blank}
-+
-____
-Couchbase Service Broker 1.0 is supported only on the Open Source Kubernetes platform including AWS EKS, Azure AKS, and Google GKE. Whereas it is not supported on Red Hat OpenShift since its deprecated and removed from the latest OpenShift releases.
-____
-* {blank}
-+
-____
-Currently, CSB 1.0 is supporting OSB API 2.13, we plan to support OSB API 2.14 and 2.15 version in the next release \{Jira ticket - https://issues.couchbase.com/browse/SBEE-11[+++SBEE-11+++]}
-____
+== Limitations
 
-=== *Feedback*
+*  Red Hat OpenShift is not supported as Template Service Broker and Service Catalog have been deprecated and removed from the latest OpenShift releases.
+* Couchbase Service Broker 1.0 supports Open Service Broker API 2.13. 
 
-You can have a big impact on future versions of the Operator (and its documentation) by providing Couchbase with your direct feedback and observations. Please feel free to post your questions and comments to the https://forums.couchbase.com/c/couchbase-server/Kubernetes[Couchbase Forums].
+== Providing Feedback
 
-=== *Licenses for Third-Party Components*
+You can have a big impact on future versions of the Couchbase Autonomous Operator (and its documentation) by providing Couchbase with your direct feedback and observations. Please feel free to post your questions and comments on https://forums.couchbase.com/c/couchbase-server/Kubernetes[Couchbase Forums].
 
-The complete list of licenses for Couchbase products is available on the https://www.couchbase.com/legal/agreements[Legal Agreements] page. Couchbase is thankful to all of the individuals that have created these third-party components.
+== Licenses for Third-Party Components
 
-*More Information*
+The complete list of licenses for Couchbase products is available on the https://www.couchbase.com/legal/agreements[Legal Agreements] page. Couchbase is thankful to all individuals who have created these third-party components.
 
-https://docs.couchbase.com/operator/2.1/release-notes.html[Release Notes: Couchbase Autonomous Operator for Kubernetes]
+== More Information
+
+xref:operator::release-notes.adoc[Release Notes: Couchbase Autonomous Operator for Kubernetes]
