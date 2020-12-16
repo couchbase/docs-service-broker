@@ -29,7 +29,7 @@ This page details the platform and software requirements for running the Service
 The following platforms are supported:
 
 •	Kubernetes 1.17+
-•	Red Hat OpenShift 4.4+
+// •	Red Hat OpenShift 4.4+
 
 In general, any Kubernetes distribution based on a supported version should work.
 

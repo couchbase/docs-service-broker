@@ -22,3 +22,5 @@
 ** xref:reference/template-functions.adoc[Dynamic Attribute Function Reference]
 ** xref:reference/container.adoc[Service Broker Container Reference]
 ** xref:reference/osb-api.adoc[Open Service Broker API Reference]
+
+* xref:release-notes.adoc[Release Notes]

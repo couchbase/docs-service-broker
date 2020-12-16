@@ -1,6 +1,6 @@
-== *Release Notes for Couchbase Service Broker 1.0*
+= Release Notes for Couchbase Service Broker 1.0
 
-Couchbase Service Broker 1.0 Provides the first native integration of Couchbase Autonomous Operator with Open Service Broker API for Open Source Kubernetes platform.
+Couchbase Service Broker 1.0 provides the first native integration of Couchbase Autonomous Operator with Open Service Broker API for Open Source Kubernetes platform.
 
 Couchbase Service Broker 1.0 provides a service class named as 'couchbase-osb-service' with 2 Service Plans – 'csb-basic' and 'csb-standard' (with the regular Couchbase Server Enterprise subscription), that will work with any version of Operator (We recommend using Operator 2.1).
 
