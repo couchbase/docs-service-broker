@@ -1,7 +1,7 @@
 .xref:index.adoc[Service Broker Home]
 
 * xref:install/get-started.adoc[Getting Started]
-** Example: Service Broker and Minikube
+** xref:install/service-broker-example.adoc[Deploy Service Broker on Minikube]
 
 * xref:concepts/index.adoc[Concepts]
 ** xref:concepts/architecture.adoc[Architecture]
