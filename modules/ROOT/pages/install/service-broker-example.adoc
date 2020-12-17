@@ -1,0 +1,218 @@
+== Sample example – Deploying couchbase cluster locally on minikube using Couchbase Service Broker
+
+[arabic]
+. *Install docker (Note: for minikube with 8GB memory, assign 8 GB memory to Docker)*
+
+https://hub.docker.com/editions/community/docker-ce-desktop-mac/[*https://hub.docker.com/editions/community/docker-ce-desktop-mac/*]
+
+wait for the installation to complete, verification, then access permissions and the whale will appear in the status bar!
+
+[arabic, start=2]
+. *Install kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)*
+
+curl -LO "https://storage.googleapis.com/kubernetes-release/release/**$(**curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt**)**/bin/darwin/amd64/kubectl"
+
+chmod +x ./kubectl
+
+sudo mv ./kubectl /usr/local/bin/kubectl
+
+kubectl version –client
+
+[arabic, start=3]
+. *Install Homebrew (https://brew.sh/)*
+
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+[arabic, start=4]
+. *Install helm*
+
+$ brew install helm
+
+[arabic, start=5]
+. *Install Minikube (https://minikube.sigs.k8s.io/docs/start/)*
+
+$ brew install minikube
+
+[arabic, start=6]
+. *Create Kubernetes Cluster Using minikube*
+
+$ minikube start --cpus 2 --memory 8192
+
+[arabic, start=7]
+. *Install Service Catalog*
+
+$ helm repo add svc-cat https://svc-catalog-charts.storage.googleapis.com
+
+$ helm search repo service-catalog
+
+$ kubectl create namespace catalog
+
+$ helm install catalog svc-cat/catalog --namespace catalog
+
+$ brew update
+
+$ brew install kubernetes-service-catalog-client
+
+[arabic, start=8]
+. *Install CAO (https://docs.couchbase.com/operator/current/install-kubernetes.html)*
+
+*Download the CAO package*
+
+*Extract the downloaded package*
+
+*$ sudo tar xf couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64.zip*
+
+*$ cd couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64*
+
+*$ kubectl create -f crd.yaml*
+
+*Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition*
+
+customresourcedefinition.apiextensions.k8s.io/couchbaseautoscalers.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbasebackuprestores.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbasebackups.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbasebuckets.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbaseclusters.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbaseephemeralbuckets.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbasegroups.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbasememcachedbuckets.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbasereplications.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbaserolebindings.couchbase.com created
+
+customresourcedefinition.apiextensions.k8s.io/couchbaseusers.couchbase.com created
+
+*$ bin/cbopcfg generate admission | kubectl create -f -*
+
+serviceaccount/couchbase-operator-admission created
+
+clusterrole.rbac.authorization.k8s.io/couchbase-operator-admission created
+
+clusterrolebinding.rbac.authorization.k8s.io/couchbase-operator-admission created
+
+secret/couchbase-operator-admission created
+
+deployment.apps/couchbase-operator-admission created
+
+service/couchbase-operator-admission created
+
+*Warning: admissionregistration.k8s.io/v1beta1 MutatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration*
+
+mutatingwebhookconfiguration.admissionregistration.k8s.io/couchbase-operator-admission created
+
+*Warning: admissionregistration.k8s.io/v1beta1 ValidatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration*
+
+validatingwebhookconfiguration.admissionregistration.k8s.io/couchbase-operator-admission created
+
+*$ bin/cbopcfg generate operator --scope cluster | kubectl create -f -*
+
+serviceaccount/couchbase-operator created
+
+clusterrole.rbac.authorization.k8s.io/couchbase-operator created
+
+clusterrolebinding.rbac.authorization.k8s.io/couchbase-operator created
+
+deployment.apps/couchbase-operator created
+
+service/couchbase-operator created
+
+[arabic, start=9]
+. *Install Couchbase Service Broker*
+
+*$ kubectl create -f crd.yaml*
+
+Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
+
+customresourcedefinition.apiextensions.k8s.io/servicebrokerconfigs.servicebroker.couchbase.com created
+
+*$ kubectl create -f servicebrokerconfig.yaml*
+
+role.rbac.authorization.k8s.io/couchbase-service-broker created
+
+servicebrokerconfig.servicebroker.couchbase.com/couchbase-service-broker created
+
+*$ kubectl create -f broker.yaml -- wait*
+
+serviceaccount/couchbase-service-broker created
+
+rolebinding.rbac.authorization.k8s.io/couchbase-service-broker created
+
+secret/couchbase-service-broker created
+
+deployment.apps/couchbase-service-broker created
+
+service/couchbase-service-broker created
+
+clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
+
+ 
+
+*$ kubectl create -f clusterservicebroker.yaml*
+
+clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
+
+*$ svcat provision csb --class couchbase-osb-service --plan csb-basic --param password=password –-wait*
+
+Waiting for the instance to be provisioned...
+
+    Name:           csb                                                                            
+
+    Namespace:      default                                                                            
+
+    Status:         Ready - The instance was provisioned successfully @ 2020-11-23 10:05:25 +0000 UTC  
+
+    DashboardURL:   https://couchbase-instance-c08r083o.default:18091
+
+    Class: 8522e991-07bc-4225-a859-1eec1e333153
+
+Plan: ec0f2c9b-0277-46d7-985f-ba1fbf3b068d
+
+ 
+
+Parameters:
+
+    password: password
+
+You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided.
+
+You can then bind to it:
+
+*$ svcat bind csb*
+
+Name:        csb  
+
+    Namespace:   default  
+
+    Status:               
+
+    Secret:      csb  
+
+    Instance:    csb  
+
+  
+
+  Parameters:
+
+    No parameters defined
+
+*$ kubectl get secrets csb*
+
+NAME TYPE DATA AGE
+
+csb Opaque 5 7m58s
+
+To access the couchbase cluster UI console,
+
+*$ kubectl port-forward couchbase-instance-winhhoku-0000 8091*
+
+Go to http://localhost:8091
+
+login with username as Administrator & password as password
