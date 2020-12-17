@@ -25,4 +25,4 @@
 
 * xref:release-notes.adoc[Release Notes]
 
-.xref:cloud-native-database::index.adoc[Go to Cloud-Native Database Documentation]
+* xref:cloud-native-database::index.adoc[Go to Cloud-Native Database Documentation]
