@@ -1,15 +1,16 @@
-== Sample example – Deploying couchbase cluster locally on minikube using Couchbase Service Broker
+= Example: Deploying Couchbase Cluster Locally on Minikube using Couchbase Service Broker
 
-[arabic]
-. *Install docker (Note: for minikube with 8GB memory, assign 8 GB memory to Docker)*
 
-https://hub.docker.com/editions/community/docker-ce-desktop-mac/[*https://hub.docker.com/editions/community/docker-ce-desktop-mac/*]
+. Install https://hub.docker.com/editions/community/docker-ce-desktop-mac/[Docker^].
++ 
+For Minikube with 8GB memory, you must assign 8 GB memory to Docker.
++
+When the installation and verification are completed and then access permissions, the status bar displays the Docker whale.
 
-wait for the installation to complete, verification, then access permissions and the whale will appear in the status bar!
-
-[arabic, start=2]
-. *Install kubectl (https://kubernetes.io/docs/tasks/tools/install-kubectl/)*
-
+. Install  https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl^].
++
+[source, bash]
+----
 curl -LO "https://storage.googleapis.com/kubernetes-release/release/**$(**curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt**)**/bin/darwin/amd64/kubectl"
 
 chmod +x ./kubectl
@@ -17,30 +18,40 @@ chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 
 kubectl version –client
+----
 
-[arabic, start=3]
-. *Install Homebrew (https://brew.sh/)*
-
+. Install https://brew.sh/[Homebrew^].
++
+[source, bash]
+----
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+----
 
-[arabic, start=4]
-. *Install helm*
-
+. Install Helm.
++
+[source, bash]
+----
 $ brew install helm
+----
 
-[arabic, start=5]
-. *Install Minikube (https://minikube.sigs.k8s.io/docs/start/)*
-
+. Install https://minikube.sigs.k8s.io/docs/start/[Minikube^]
++
+[source, bash]
+----
 $ brew install minikube
+----
 
-[arabic, start=6]
-. *Create Kubernetes Cluster Using minikube*
-
+. Create Kubernetes Cluster Using minikube.
++
+[source, bash]
+----
 $ minikube start --cpus 2 --memory 8192
+----
 
-[arabic, start=7]
-. *Install Service Catalog*
-
+. Install Service Catalog.
++
+[source, bash]
+----
 $ helm repo add svc-cat https://svc-catalog-charts.storage.googleapis.com
 
 $ helm search repo service-catalog
@@ -52,19 +63,26 @@ $ helm install catalog svc-cat/catalog --namespace catalog
 $ brew update
 
 $ brew install kubernetes-service-catalog-client
+----
 
-[arabic, start=8]
-. *Install CAO (https://docs.couchbase.com/operator/current/install-kubernetes.html)*
+. Install xref:operator::install-kubernetes.adoc[Couchbase Autonomous Operator].
 
-*Download the CAO package*
+.. Download the Couchbase Autonomous Operator package.
 
-*Extract the downloaded package*
+.. Extract the downloaded package.
++
+[source,bash]
+----
+$ sudo tar xf couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64.zip
 
-*$ sudo tar xf couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64.zip*
+$ cd couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64
+----
 
-*$ cd couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64*
-
-*$ kubectl create -f crd.yaml*
+.. From the extracted directory, run the following commands. Note that the following code snippets also display the sample output. 
++
+[source,bash]
+----
+$ kubectl create -f crd.yaml
 
 *Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition*
 
@@ -89,8 +107,11 @@ customresourcedefinition.apiextensions.k8s.io/couchbasereplications.couchbase.co
 customresourcedefinition.apiextensions.k8s.io/couchbaserolebindings.couchbase.com created
 
 customresourcedefinition.apiextensions.k8s.io/couchbaseusers.couchbase.com created
-
-*$ bin/cbopcfg generate admission | kubectl create -f -*
+----
++
+[source,bash]
+----
+$ bin/cbopcfg generate admission | kubectl create -f -
 
 serviceaccount/couchbase-operator-admission created
 
@@ -111,8 +132,11 @@ mutatingwebhookconfiguration.admissionregistration.k8s.io/couchbase-operator-adm
 *Warning: admissionregistration.k8s.io/v1beta1 ValidatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration*
 
 validatingwebhookconfiguration.admissionregistration.k8s.io/couchbase-operator-admission created
-
-*$ bin/cbopcfg generate operator --scope cluster | kubectl create -f -*
+----
++
+[source,bash]
+----
+$ bin/cbopcfg generate operator --scope cluster | kubectl create -f -
 
 serviceaccount/couchbase-operator created
 
@@ -123,23 +147,31 @@ clusterrolebinding.rbac.authorization.k8s.io/couchbase-operator created
 deployment.apps/couchbase-operator created
 
 service/couchbase-operator created
+----
 
-[arabic, start=9]
-. *Install Couchbase Service Broker*
-
-*$ kubectl create -f crd.yaml*
+. Install Couchbase Service Broker.
++
+[source,bash]
+----
+$ kubectl create -f crd.yaml
 
 Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
 
 customresourcedefinition.apiextensions.k8s.io/servicebrokerconfigs.servicebroker.couchbase.com created
-
-*$ kubectl create -f servicebrokerconfig.yaml*
+----
++
+[source,bash]
+----
+$ kubectl create -f servicebrokerconfig.yaml
 
 role.rbac.authorization.k8s.io/couchbase-service-broker created
 
 servicebrokerconfig.servicebroker.couchbase.com/couchbase-service-broker created
-
-*$ kubectl create -f broker.yaml -- wait*
+----
++
+[source,bash]
+----
+$ kubectl create -f broker.yaml -- wait
 
 serviceaccount/couchbase-service-broker created
 
@@ -152,14 +184,18 @@ deployment.apps/couchbase-service-broker created
 service/couchbase-service-broker created
 
 clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
-
- 
-
-*$ kubectl create -f clusterservicebroker.yaml*
+----
++
+[source,bash]
+----
+$ kubectl create -f clusterservicebroker.yaml
 
 clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
-
-*$ svcat provision csb --class couchbase-osb-service --plan csb-basic --param password=password –-wait*
+----
++
+[source,bash]
+----
+$ svcat provision csb --class couchbase-osb-service --plan csb-basic --param password=password –-wait
 
 Waiting for the instance to be provisioned...
 
@@ -180,12 +216,13 @@ Plan: ec0f2c9b-0277-46d7-985f-ba1fbf3b068d
 Parameters:
 
     password: password
-
-You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided.
-
-You can then bind to it:
-
-*$ svcat bind csb*
+---- 
++
+You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided. You can then bind to it:
++
+[source,bash]
+----
+$ svcat bind csb
 
 Name:        csb  
 
@@ -202,17 +239,22 @@ Name:        csb  
   Parameters:
 
     No parameters defined
-
-*$ kubectl get secrets csb*
+----   
++
+[source,bash]
+----
+$ kubectl get secrets csb
 
 NAME TYPE DATA AGE
 
 csb Opaque 5 7m58s
+----
 
-To access the couchbase cluster UI console,
-
-*$ kubectl port-forward couchbase-instance-winhhoku-0000 8091*
-
-Go to http://localhost:8091
-
-login with username as Administrator & password as password
+. To access the Couchbase Cluster Admin UI console:
++
+[source,bash]
+----
+$ kubectl port-forward couchbase-instance-winhhoku-0000 8091
+----
++
+Go to http://localhost:8091 and login with user name `Administrator` and password as `password`.
