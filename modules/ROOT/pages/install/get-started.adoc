@@ -1,4 +1,5 @@
 = Install and Get Started with Couchbase Service Broker on Kubernetes
+:page-aliases: install:container.adoc, install:index.adoc, install:ingress.adoc, install:kubernetes.adoc, install:packages.adoc, install:prerequisites.adoc, install:serviceinstance.adoc
 
 [abstract]
 This section describes how to get and install the service broker and create your first service instance.
