@@ -1,0 +1,49 @@
+= Couchbase Service Broker Documentation
+// Settings:
+ifdef::env-github[]
+:warning-caption: :warning:
+endif::[]
+// URLs:
+:url-org: https://github.com/couchbase
+:url-contribute: https://docs.couchbase.com/home/contribute/index.html
+:url-ui: {url-org}/docs-ui
+:url-playbook: {url-org}/docs-site
+:url-operator: {url-org}/couchbase-operator
+:url-open-service-broker: {url-org}/service-broker
+:url-docs-service-broker: {url-org}/docs-service-broker
+:url-couchbase-service-broker: https://github.com/couchbaselabs/couchbase-service-broker
+:url-analytics: https://github.com/couchbaselabs/asterix-opt
+
+This repository hosts the documentation source for the Couchbase Service Broker.
+The published documentation can be found https://docs.couchbase.com/service-broker/current/index.html[here^].
+
+Note that this documentation is based, in part, on documentation from the Couchbase-maintained {url-open-service-broker}[Kubernetes Generic Service Broker^].
+
+== Contributing
+
+Check out our {url-contribute}[contributing guide] to learn how to:
+
+* submit a bug or feedback issue
+* set up your documentation workspace
+* build the documentation
+* submit a pull request
+
+Thank you for helping to make the documentation better.
+
+NOTE: Some contributions to this documentation may be selectively ported to the Couchbase-maintained {url-open-service-broker}[Kubernetes Generic Service Broker^].
+
+== Docs Component Configuration
+
+This repository contains an Antora docs component.
+Keep in mind these key repository features:
+
+* Component name, version, and start page are configured in each branch's _antora.yml_ file.
+* The navigation for all Server modules, including those aggregated from other repositories, is stored in the ROOT module's _nav.adoc_ file.
+* Production branches use the *x.0.y* naming pattern adopted from the {url-operator}[Couchbase Autonomous Operator^] and {url-couchbase-service-broker}[Couchbase Service Broker^].
+
+== Documentation Site Toolchain
+
+The documentation source files are marked up with AsciiDoc.
+Once merged into branch `master`, the source files and their assets are aggregated, converted to HTML, and published by Antora to our staging and production sites.
+The docs components and {url-ui}[site UI^] are orchestrated by the {url-playbook}[docs site playbook^].
+See the contributing guide to learn more.
