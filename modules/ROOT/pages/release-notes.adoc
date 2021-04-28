@@ -1,29 +1,50 @@
-= Release Notes for Couchbase Service Broker 1.0
+= Release Notes for Couchbase Service Broker {service-broker-version-minor}
+include::partial$constants.adoc[]
 
-Couchbase Service Broker 1.0 provides the first native integration of Couchbase Autonomous Operator with Open Service Broker API for the Open Source Kubernetes platform.
+The Couchbase Service Broker provides native integration of the Couchbase Autonomous Operator with the https://www.openservicebrokerapi.org/[Open Service Broker API^] for Open Source Kubernetes .
 
-Couchbase Service Broker 1.0 provides a service class named _couchbase-osb-service_ with two service plans: `csb-basic` and `csb-standard` (with the regular Couchbase Server Enterprise subscription), that will work with any version of Couchbase Autonomous Operator. However, we recommend using Couchbase Autonomous Operator version 2.1.
+Couchbase Service Broker {service-broker-version-minor} provides a service class named _couchbase-osb-service_ with two service plans: `csb-basic` and `csb-standard` (with the regular Couchbase Server Enterprise subscription), that will work with any version of Couchbase Autonomous Operator.
+However, we recommend using Couchbase Autonomous Operator version {operator-version-minor}.
 
 Take a look at the xref:service-broker::index.adoc[Getting Started] page to learn about Couchbase Service Broker in detail.
 
-== Platform Support
+[#release-v110]
+== Release 1.1.0
 
-Couchbase Service Broker 1.0 is supported only on the Open Source Kubernetes platform including AWS EKS, Azure AKS, and Google GKE.
+Couchbase Service Broker 1.1.0 was released in May 2021.
 
-For the latest platform support information, see xref:install/get-started.adoc#prerequisites[Prerequisites].
+[#supported-platforms-v110]
+=== Platform Support
 
-== Limitations
+No changes in platform support have been made in Couchbase Service Broker 1.1.0.
 
-*  Red Hat OpenShift is not supported as Template Service Broker and Service Catalog have been deprecated and removed from the latest OpenShift releases.
-* Couchbase Service Broker 1.0 supports Open Service Broker API 2.13. 
+For a list of currently supported platforms, refer to xref:install/get-started.adoc#prerequisites[Prerequisites].
+
+[#new-features-v110]
+=== New Features and Behavioral Changes
+
+* https://github.com/couchbase/service-broker/issues/52[#52^] Advanced Templating (loops)
+
+* https://github.com/couchbase/service-broker/issues/48[#48^] More template filters
+
+==== New Tool: `cbsbcfg`
+
+The Couchbase Service Broker https://www.couchbase.com/downloads[package^] now ships with a new command-line binary tool: `cbsbcfg`.
+Binaries for Linux, Windows, and macOS are provided.
+This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:service-broker::index.adoc[Getting Started] guide.
+
+[#bug-issues-v110]
+=== Bug Fixes
+
+* https://github.com/couchbase/service-broker/issues/49[#49^] Deprovisioning fails on client-side when using eden
 
 == Providing Feedback
 
-You can have a big impact on future versions of the Couchbase Autonomous Operator (and its documentation) by providing Couchbase with your direct feedback and observations. Please feel free to post your questions and comments on https://forums.couchbase.com/c/couchbase-server/Kubernetes[Couchbase Forums].
+You can have a big impact on future versions of the Couchbase Autonomous Operator (and its documentation) by providing Couchbase with your direct feedback and observations. Please feel free to post your questions and comments on https://forums.couchbase.com/c/couchbase-server/Kubernetes[Couchbase Forums^].
 
 == Licenses for Third-Party Components
 
-The complete list of licenses for Couchbase products is available on the https://www.couchbase.com/legal/agreements[Legal Agreements] page. Couchbase is thankful to all individuals who have created these third-party components.
+The complete list of licenses for Couchbase products is available on the https://www.couchbase.com/legal/agreements[Legal Agreements^] page. Couchbase is thankful to all individuals who have created these third-party components.
 
 == More Information
 

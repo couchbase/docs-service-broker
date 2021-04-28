@@ -1,0 +1,5 @@
+:service-broker-version: 1.1.0
+:service-broker-version-minor: 1.1
+:operator-version: 2.2.0
+:operator-version-minor: 2.2
+:admission-controller-version: 2.2.0
