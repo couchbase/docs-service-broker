@@ -36,3 +36,9 @@ These reference topics describe the use of Service Broker container images.
 These reference topics describe Service Broker specific behavior within the bounds of the Open Service Broker API.
 
 * xref:reference/osb-api.adoc[Open Service Broker API Reference]
+
+.Tools
+
+These reference topics describe the command-line interface (CLI) tools that are provided with the Couchbase Service Broker.
+
+* xref:reference/tools/cbsbctl.adoc[cbsbctl]
