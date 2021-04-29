@@ -1,0 +1,734 @@
+// THIS FILE IS AUTO-GENERATED - DO NOT EDIT
+= cbsbctl
+== cbsbctl
+
+
+
+== cbsbctl create
+
+Create a service broker deployment
+
+== cbsbctl create clusterservicebroker
+
+Create a cluster scoped service broker deployment
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--image::
+*Type*: string
++
+*Default*: couchbase/service-broker:
++
+use a specific container image
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--profile::
+*Type*: string
++
+install a service catalog and role with a profile
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
+== cbsbctl create servicebroker
+
+Create a namespace scoped service broker deployment
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--image::
+*Type*: string
++
+*Default*: couchbase/service-broker:
++
+use a specific container image
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--profile::
+*Type*: string
++
+install a service catalog and role with a profile
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
+== cbsbctl delete
+
+Delete a service broker deployment
+
+== cbsbctl delete clusterservicebroker
+
+Delete a namespace scoped service broker deployment
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--profile::
+*Type*: string
++
+install a service catalog and role with a profile
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
+== cbsbctl delete servicebroker
+
+Delete a namespace scoped service broker deployment
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--profile::
+*Type*: string
++
+install a service catalog and role with a profile
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
+== cbsbctl generate
+
+Generate service broker YAML to the console
+
+== cbsbctl generate clusterservicebroker
+
+Generate cluster scoped service broker YAML to the console
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--image::
+*Type*: string
++
+*Default*: couchbase/service-broker:
++
+use a specific container image
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--profile::
+*Type*: string
++
+install a service catalog and role with a profile
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
+== cbsbctl generate servicebroker
+
+Generate namespace scoped service broker YAML to the console
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--image::
+*Type*: string
++
+*Default*: couchbase/service-broker:
++
+use a specific container image
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--profile::
+*Type*: string
++
+install a service catalog and role with a profile
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
+== cbsbctl version
+
+Prints the command version
+
+=== Inherited Flags
+
+--as::
+*Type*: string
++
+Username to impersonate for the operation
+
+--as-group::
+*Type*: stringArray
++
+*Default*: []
++
+Group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+
+--cache-dir::
+*Type*: string
++
+*Default*: $HOME/.kube/cache
++
+Default cache directory
+
+--certificate-authority::
+*Type*: string
++
+Path to a cert file for the certificate authority
+
+--client-certificate::
+*Type*: string
++
+Path to a client certificate file for TLS
+
+--client-key::
+*Type*: string
++
+Path to a client key file for TLS
+
+--cluster::
+*Type*: string
++
+The name of the kubeconfig cluster to use
+
+--context::
+*Type*: string
++
+The name of the kubeconfig context to use
+
+--insecure-skip-tls-verify::
+*Type*: bool
++
+*Default*: false
++
+If true, the server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+
+--kubeconfig::
+*Type*: string
++
+Path to the kubeconfig file to use for CLI requests.
+
+--namespace, -n::
+*Type*: string
++
+If present, the namespace scope for this CLI request
+
+--request-timeout::
+*Type*: string
++
+*Default*: 0
++
+The length of time to wait before giving up on a single server request. Non-zero values should contain a corresponding time unit (e.g. 1s, 2m, 3h). A value of zero means don't timeout requests.
+
+--server, -s::
+*Type*: string
++
+The address and port of the Kubernetes API server
+
+--tls-server-name::
+*Type*: string
++
+Server name to use for server certificate validation. If it is not provided, the hostname used to contact the server is used
+
+--token::
+*Type*: string
++
+Bearer token for authentication to the API server
+
+--user::
+*Type*: string
++
+The name of the kubeconfig user to use
+
