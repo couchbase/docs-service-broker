@@ -3,15 +3,16 @@ include::partial$constants.adoc[]
 
 The Couchbase Service Broker provides native integration of the Couchbase Autonomous Operator with the https://www.openservicebrokerapi.org/[Open Service Broker API^] for Open Source Kubernetes .
 
-Couchbase Service Broker {service-broker-version-minor} provides a service class named _couchbase-osb-service_ with two service plans: `csb-basic` and `csb-standard` (with the regular Couchbase Server Enterprise subscription), that will work with any version of Couchbase Autonomous Operator.
-However, we recommend using Couchbase Autonomous Operator version {operator-version-minor}.
+== Installation
 
-Take a look at the xref:service-broker::index.adoc[Getting Started] page to learn about Couchbase Service Broker in detail.
+For installation instructions, refer to:
+
+* xref:install:get-started.adoc[]
 
 [#release-v110]
 == Release 1.1.0
 
-Couchbase Service Broker 1.1.0 was released in May 2021.
+Couchbase Service Broker 1.1.0 was released in June 2021.
 
 [#supported-platforms-v110]
 === Platform Support
@@ -20,18 +21,44 @@ No changes in platform support have been made in Couchbase Service Broker 1.1.0.
 
 For a list of currently supported platforms, refer to xref:install/get-started.adoc#prerequisites[Prerequisites].
 
-[#new-features-v110]
-=== New Features and Behavioral Changes
+[#changes-in-behavior-v110]
+=== Major Behavior Changes and Enhancements
 
-* https://github.com/couchbase/service-broker/issues/52[#52^] Advanced Templating (loops)
+==== New Service Classes
 
-* https://github.com/couchbase/service-broker/issues/48[#48^] More template filters
+Couchbase Service Broker 1.1.0 provides the following service classes:
+
+* Class: `cao-2.1-service`
+** Plan: `csb-basic`
+** Plan: `csb-standard`
+
+* Class: `cao-2.2-service`
+** Plan: `csb-basic`
+** Plan: `csb-standard`
+
+* Class: `couchbase-autonomous-operator`
+** Plan: `2.1.0`
+** Plan: `2.2.0`
+
+Each `cao` service class has two service plans -- `csb-basic` and `csb-standard` -- for its respective version of the Autonomous Operator.
+These service classes are provided on either a per-namespace or global basis.
+
+NOTE: The `couchbase-autonomous-operator` class is not meant to be used directly, but is instead instantiated by the `cao` plans.
+This design maintains a separation between Couchbase custom resources and the Autonomous Operator itself.
+
+For more information, refer to the xref:install:get-started.adoc[Getting Started] guide.
 
 ==== New Tool: `cbsbcfg`
 
 The Couchbase Service Broker https://www.couchbase.com/downloads[package^] now ships with a new command-line binary tool: `cbsbcfg`.
 Binaries for Linux, Windows, and macOS are provided.
-This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:service-broker::index.adoc[Getting Started] guide.
+This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:install:get-started.adoc[Getting Started] guide.
+
+==== Other Notable Changes
+
+* https://github.com/couchbase/service-broker/issues/52[#52^] Advanced Templating (loops)
+
+* https://github.com/couchbase/service-broker/issues/48[#48^] More template filters
 
 [#bug-issues-v110]
 === Bug Fixes
@@ -48,4 +75,4 @@ The complete list of licenses for Couchbase products is available on the https:/
 
 == More Information
 
-xref:operator::release-notes.adoc[Release Notes: Couchbase Autonomous Operator for Kubernetes]
+xref:operator::release-notes.adoc[Couchbase Autonomous Operator Release Notes]
