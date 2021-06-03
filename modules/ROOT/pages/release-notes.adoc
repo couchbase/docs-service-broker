@@ -48,11 +48,13 @@ This design maintains a separation between Couchbase custom resources and the Au
 
 For more information, refer to the xref:install:get-started.adoc[Getting Started] guide.
 
-==== New Tool: `cbsbcfg`
+==== New Tool: `cbsbctl`
 
-The Couchbase Service Broker https://www.couchbase.com/downloads[package^] now ships with a new command-line binary tool: `cbsbcfg`.
+The Couchbase Service Broker https://www.couchbase.com/downloads[package^] now ships with a new command-line binary tool: `cbsbctl`.
 Binaries for Linux, Windows, and macOS are provided.
 This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:install:get-started.adoc[Getting Started] guide.
+
+Refer to the xref:reference:tools/cbsbctl.adoc[`cbsbctl` reference page] for detailed command usage information.
 
 ==== Other Notable Changes
 
