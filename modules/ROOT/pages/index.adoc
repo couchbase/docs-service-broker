@@ -3,10 +3,6 @@
 [abstract]
 This page describes what the Service Broker is and how it can help you.
 
-ifdef::env-github[]
-:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
-endif::[]
-
 == What are Service Brokers?
 
 image::osb-logo.png[align="center"]

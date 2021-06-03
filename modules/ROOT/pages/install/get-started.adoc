@@ -29,10 +29,15 @@ This page details the platform and software requirements for running the Service
 
 The following platforms are supported:
 
-•	Kubernetes 1.17+
-// •	Red Hat OpenShift 4.4+
+* Kubernetes 1.17+
+** Includes managed Kubernetes platforms AWS EKS, Azure AKS, and Google GKE
 
 In general, any Kubernetes distribution based on a supported version should work.
+
+[NOTE]
+====
+Red Hat OpenShift is not supported since Template Service Broker and Service Catalog have been deprecated and removed from the latest OpenShift releases.
+====
 
 === Kubernetes Service Catalog
 
