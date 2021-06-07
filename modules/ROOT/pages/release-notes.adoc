@@ -7,7 +7,7 @@ The Couchbase Service Broker provides native integration of the Couchbase Autono
 
 For installation instructions, refer to:
 
-* xref:install:get-started.adoc[]
+* xref:install/get-started.adoc[]
 
 [#release-v110]
 == Release 1.1.0

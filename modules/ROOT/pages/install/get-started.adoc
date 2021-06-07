@@ -1,29 +1,17 @@
-= Install and Get Started with Couchbase Service Broker on Kubernetes
+= Get Started with Couchbase Service Broker on Kubernetes
+include::partial$constants.adoc[]
 :page-aliases: install:container.adoc, install:index.adoc, install:ingress.adoc, install:kubernetes.adoc, install:packages.adoc, install:prerequisites.adoc, install:serviceinstance.adoc
 
 [abstract]
-This section describes how to get and install the service broker and create your first service instance.
+This page describes how to get and install the Couchbase Service B roker and create your first service instance.
 
-ifdef::env-github[]
-:relfileprefix: ../
-:imagesdir: https://github.com/couchbase/service-broker/raw/master/documentation/modules/ROOT/assets/images
-endif::[]
-
-The Service Broker is just a simple web-service that creates Kubernetes resources on demand as requested by the API.
-This tutorial will walk you through the steps to install and get started with Couchbase Service Broker on Kubernetes.
-
-////
-. <<prerequisites>>
-. <<download-pkgs>>
-. <<install-service-broker>>
-. <<provision-cb-cluster-service>>
-. <<bind-to-provisioned-service>>
-////
+The Couchbase Service Broker is just a simple web-service that creates Kubernetes resources on demand as requested by the API.
+This guide will walk you through the steps to install and get started with Couchbase Service Broker on Kubernetes.
 
 [#prerequisites]
 == Prerequisites
 
-This page details the platform and software requirements for running the Service Broker.
+This section describes the platform and software requirements for running the Service Broker.
 
 === Kubernetes Cluster
 
@@ -36,69 +24,124 @@ In general, any Kubernetes distribution based on a supported version should work
 
 [NOTE]
 ====
-Red Hat OpenShift is not supported since Template Service Broker and Service Catalog have been deprecated and removed from the latest OpenShift releases.
+Red Hat OpenShift is not supported, as Template Service Broker and Service Catalog have been deprecated and removed from the latest OpenShift releases.
 ====
 
 === Kubernetes Service Catalog
 
-The Service Broker is recommended for use with the Kubernetes Service Catalog.
-Installation instructions can be found in the official documentation.
-As the Service Broker is standards based, any version of the Service Catalog supporting the Open Service Broker API version 2.13+ is supported.
+The Couchbase Service Broker is intended to be used in Kubernetes-based environments, therefore the https://kubernetes.io/docs/concepts/extend-kubernetes/service-catalog/[Kubernetes Service Catalog^] is required to be installed on your Kubernetes cluster.
+Since the Service Broker is standards based, any version of the Kubernetes Service Catalog that is compatible with Open Service Broker API 2.13+ is supported.
 
-=== Couchbase Autonomous Operator
-
-Install the Operator CRDs, dynamic admission controller and Operator as documented xref:operator:install-kubernetes.adoc[here].
-For this guide, the Operator must be deployed at the cluster scope, not the default namespaced scope.
+Installation instructions can be found in the official Kubernetes documentation, including a guide on how to install the Service Catalog https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/[using Helm^].
 
 [#download-pkgs]
-== Package Downloads 
+== Package Downloads
 
-Download Couchbase Service Broker https://www.couchbase.com/downloads[package] and unpack on the same computer where you normally run kubectl.
+Before you can proceed with rest of the steps in this guide, you'll need to download the necessary packages from https://www.couchbase.com/downloads[^].
 
-The Couchbase Service Broker package contains YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
+Please download the following packages:
 
-[#install-service-broker]
-== Install Couchbase Service Broker
+* *Couchbase Service Broker {service-broker-version-minor}*
+* *Couchbase Autonomous Operator 2.1 or 2.2*
 
-IMPORTANT: After you unpack the downloaded package, the resulting directory will be titled something like couchbase-service-broker_x.x.x. Make sure to `cd` into this directory before you run the remaining commands in this guide.
+Both of these packages contain YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
 
-=== Install the CRD
+IMPORTANT: Make sure to unpack these packages on the same computer where you normally run `kubectl`.
+The resulting directory will be titled something like couchbase-service-broker_x.x.x.
+Make sure to `cd` into this directory before you run the remaining commands in this guide.
 
-The Service Broker is configured using a Kubernetes Custom Resource that allows type checking of your configurations and must be installed first:
+== Install the Required Command-line Tools
+
+=== Install `cbcsctl`
+
+The Couchbase _Service Broker_ package includes a command-line tool named `cbsbctl`, which is used during installation.
+Use the steps below to install `cbsbctl` on your platform of choice.
+
+include::partial$tools-install.adoc[tags=cbsbctl]
+
+=== Install `cbopcfg`
+
+The Couchbase _Autonomous Operator_ package includes a command-line tool named `cbsbctl`, which is used to install certain dependencies for the Autonomous Operator.
+Use the steps below to install `cbopcfg` on your platform of choice.
+
+include::partial$tools-install.adoc[tags=cbopcfg]
+
+== Install the Required Dependencies
+
+IMPORTANT: All of the Kubernetes command-line examples in this guide assume the `default` namepsace, unless stated otherwise.
+
+=== Install the Service Broker CRD
+
+The Service Broker is configured using a Kubernetes custom resource that allows type checking of your configurations.
+In order to use this custom resource, you must install the custom resource definition (CRD) that is included in the Service Broker package download.
+
+From the unpacked _Service Broker_ directory:
 
 [source,console]
 ----
 $ kubectl create -f crd.yaml
 ----
 
-=== Install a Configuration
+=== Install the Autonomous Operator CRDs and Dynamic Admission Controller
+
+The included service plans deploy instances of the Autonomous Operator, which has its own dependencies.
+
+
+From the unpacked _Autonomous Operator_ directory, run the following command to install the Autonomous Operator CRD:
 
 [source,console]
 ----
-$ kubectl create -f servicebrokerconfig.yaml
+$ kubectl create -f crd.yaml
 ----
 
-=== Install the Service Broker Service
+Next, run the following command to install the dynamic admission controller (DAC) into the `default` namespace.
+
+[source,console]
+----
+$ bin/cbopcfg create admission
+----
 
 [NOTE]
 ====
-For users of Red Hat OpenShift, you can use the base Kubernetes download package and images.
-The Service Broker is a statically compiled binary, so does not need an entire Red Hat Enterprise Linux base image.
-It is safer to use the Kubernetes image as it contains fewer security vulnerabilities.
-You may be required to use the Red Hat images for policy compliance, for example.
-
-If you choose to use the OpenShift download package may need to modify the following `broker.yaml` configuration and alter the following, depending on your environment:
-
-* You may need to create a Docker secret in the namespace into which you deploy the Service Broker, in order to authenticate against the Red Hat Container Registry, and pull the image.
-  This secret needs to be added to the `couchbase-service-broker` service account's image pull secrets in order to pass the privileges on to the Service Broker deployment.
-====
+If running Autonomous Operator 2.1, use the following command instead:
 
 [source,console]
 ----
-$ kubectl create -f broker.yaml
+$ bin/cbopcfg generate admission | kubectl create -f -
 ----
+====
 
-The ServiceAccount the Service Broker runs as is bound to the Role we created in the previous step. A Secret contains the TLS configuration and bearer token for authentication as the Service Broker is secure by default.
+The above commands were taken from the Autonomous Operator xref:operator::install-kubernetes.adoc[installation guide].
+Please refer to that guide for additional information about installing these dependencies, including steps to verify proper installation.
+
+== Install the Service Broker
+
+The following commands can be used to install the Service Broker configuration and service.
+The Service Broker can be installed at the namespace level or the cluster level.
+
+[{tabs}]
+====
+namespace::
++
+--
+[source,console]
+----
+$ ./cbsbctl create clusterservicebroker --profile demo-servicebroker
+----
+--
+
+cluster::
++
+--
+[source,console]
+----
+$ ./cbsbctl create clusterservicebroker --profile demo-clusterservicebroker
+----
+--
+====
+
+The ServiceAccount that the Service Broker runs as is bound to a ClusterRole.
+A Secret contains the TLS configuration and bearer token for authentication as the Service Broker is secure by default.
 
 [NOTE]
 ====
@@ -114,36 +157,39 @@ These can be found in the `couchbase-service-broker` cluster role binding define
 ====
 
 The Deployment creates the Service Broker and ensures it is highly available and a Service makes it discoverable by the Kubernetes Service Catalog in the next step.
-Check the status of the service broker
+
+You can run the following command to check the status of the Service Broker:
 
 [source,console]
 ----
 $ kubectl get deployments
-
+----
+----
 NAME                          	 	READY   	UP-TO-DATE   AVAILABLE   	AGE
 couchbase-operator            		 1/1     		1            	1        	33m
 couchbase-operator-admission   		 1/1     		1             1        	37m
 couchbase-service-broker       		 1/1     		1            	1         32m
 ----
 
-=== Register the Service Broker with the Service Catalog
-
-The final step is to tell the Kubernetes Service Catalog about our Service Broker. 
-
-[source,console]
-----
-$ kubectl create -f clusterservicebroker.yaml
-----
-
 [#provision-cb-cluster-service]
-== Provision the Couchbase Cluster Service:
+== Provision the Couchbase Cluster Service
+
+The following service classes are available to choose from:
+
+* Class: `cao-2.1-service`
+** Plan: `csb-basic`
+** Plan: `csb-standard`
+
+* Class: `cao-2.2-service`
+** Plan: `csb-basic`
+** Plan: `csb-standard`
+
+The following command deploys a three-node cluster (by default), with a Bucket, and an Administrator user with a password.
 
 [source,console]
 ----
-$ svcat provision csb --class couchbase-osb-service --plan csb-basic --param password=password --wait
+$ svcat provision csb --class cao-2.2-service --plan csb-basic --param password=password --wait
 ----
-
-You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided.
 
 [#bind-to-provisioned-service]
 == Bind to the Provisioned Service
@@ -151,18 +197,20 @@ You will end up with a 3 node cluster (by default), with a Bucket, an Administra
 [source,console]
 ----
 $ svcat bind csb
+----
+----
+Name:        csb
+    Namespace:   default
+    Status:
+    Secret:      csb
+    Instance:    csb
 
-Name:        csb 
-    Namespace:   default  
-    Status:               
-    Secret:      csb  
-    Instance:    csb  
-  
   Parameters:
     No parameters defined
-----    
+----
 
-This will create a user and allow access to the bucket.  Connection string, username, password and CA certificate will be in the secret, ready to be used by a client of some variety.
+This will create a user and allow access to the bucket.
+Connection string, username, password, and CA certificate will be in the secret, ready to be used by a client of some variety.
 
 [source,console]
 ----
@@ -171,13 +219,11 @@ NAME   TYPE     DATA   AGE
 csb    	Opaque       5      7m58s
 ----
 
-To access the couchbase cluster UI console: 
+To access the Couchbase Web Console:
 
 [source,console]
 ----
 $ kubectl port-forward couchbase-instance-winhhoku-0000 8091
 ----
 
-Go to http://localhost:8091 and login with username as Administrator & password as password.
-
-// The following example demonstrates how to deploy a Couchbase cluster on your local with Couchbase Service Broker from scratch.
+Go to `http://localhost:8091` and login with the credentials used when provisioning the Couchbase cluster service.

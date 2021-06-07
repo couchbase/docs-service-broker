@@ -1,0 +1,135 @@
+// tag::cbsbctl[]
+[{tabs}]
+====
+macOS::
++
+--
+. Open a Terminal window and go to the directory where the `cbsbctl` binary is located:
++
+[source,console]
+----
+$ cd couchbase-service-broker-kubernetes_x.x.x-macos_x86_64/
+----
+
+. Make the `cbsbctl` binary executable:
++
+[source,console]
+----
+$ chmod +x ./cbsbctl
+----
+
+. Move the binary into your PATH:
++
+[source,console]
+----
+$ sudo mv ./cbsbctl /usr/local/bin/cbsbctl
+----
+--
+
+Linux::
++
+--
+. Open a command prompt and go to the directory where the `cbsbctl` binary is located:
++
+[source,console]
+----
+$ cd couchbase-service-broker-kubernetes_x.x.x-linux_x86_64/
+----
+
+. Make the `cbsbctl` binary executable:
++
+[source,console]
+----
+$ chmod +x ./cbsbctl
+----
+
+. Move the binary into your PATH:
++
+[source,console]
+----
+$ sudo mv ./cbsbctl /usr/local/bin/cbsbctl
+----
+--
+
+Windows::
++
+--
+. Open a command prompt and go to the directory where the `cbsbctl` binary is located:
++
+[source,console]
+----
+$ cd couchbase-service-broker-kubernetes_x.x.x-windows_x86_64\
+----
+
+. Add the `cbsbctl` binary into your PATH.
+--
+====
+// end::cbsbctl[]
+
+// tag::cbopcfg[]
+[{tabs}]
+====
+macOS::
++
+--
+. Open a Terminal window and go to the directory where the `cbopcfg` binary is located:
++
+[source,console]
+----
+$ cd couchbase-autonomous-operator-kubernetes_x.x.x-macos_x86_64/bin/
+----
+
+. Make the `cbopcfg` binary executable:
++
+[source,console]
+----
+$ chmod +x ./cbopcfg
+----
+
+. Move the binary into your PATH:
++
+[source,console]
+----
+$ sudo mv ./cbopcfg /usr/local/bin/cbopcfg
+----
+--
+
+Linux::
++
+--
+. Open a command prompt and go to the directory where the `cbopcfg` binary is located:
++
+[source,console]
+----
+$ cd couchbase-autonomous-operator-kubernetes_x.x.x-linux_x86_64/bin/
+----
+
+. Make the `cbopcfg` binary executable:
++
+[source,console]
+----
+$ chmod +x ./cbopcfg
+----
+
+. Move the binary into your PATH:
++
+[source,console]
+----
+$ sudo mv ./cbopcfg /usr/local/bin/cbopcfg
+----
+--
+
+Windows::
++
+--
+. Open a command prompt and go to the directory where the `cbopcfg` binary is located:
++
+[source,console]
+----
+$ cd couchbase-autonomous-operator-kubernetes_x.x.x-windows_x86_64\bin\
+----
+
+. Add the `cbopcfg` binary into your PATH.
+--
+====
+// end::cbopcfg[]
