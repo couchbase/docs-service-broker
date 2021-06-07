@@ -3,7 +3,7 @@ include::partial$constants.adoc[]
 :page-aliases: install:container.adoc, install:index.adoc, install:ingress.adoc, install:kubernetes.adoc, install:packages.adoc, install:prerequisites.adoc, install:serviceinstance.adoc
 
 [abstract]
-This page describes how to get and install the Couchbase Service B roker and create your first service instance.
+This page describes how to get and install the Couchbase Service Broker and create your first service instance.
 
 The Couchbase Service Broker is just a simple web-service that creates Kubernetes resources on demand as requested by the API.
 This guide will walk you through the steps to install and get started with Couchbase Service Broker on Kubernetes.
@@ -47,7 +47,7 @@ Please download the following packages:
 Both of these packages contain YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
 
 IMPORTANT: Make sure to unpack these packages on the same computer where you normally run `kubectl`.
-The resulting directory will be titled something like couchbase-service-broker_x.x.x.
+The resulting directory will be titled something like `couchbase-service-broker-kubernetes`.
 Make sure to `cd` into this directory before you run the remaining commands in this guide.
 
 == Install the Required Command-line Tools
@@ -126,7 +126,7 @@ namespace::
 --
 [source,console]
 ----
-$ ./cbsbctl create clusterservicebroker --profile demo-servicebroker
+$ ./cbsbctl create servicebroker --profile demo
 ----
 --
 
@@ -135,7 +135,7 @@ cluster::
 --
 [source,console]
 ----
-$ ./cbsbctl create clusterservicebroker --profile demo-clusterservicebroker
+$ ./cbsbctl create clusterservicebroker --profile demo
 ----
 --
 ====

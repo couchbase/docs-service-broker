@@ -8,14 +8,14 @@ macOS::
 +
 [source,console]
 ----
-$ cd couchbase-service-broker-kubernetes_x.x.x-macos_x86_64/
+$ cd couchbase-service-broker-kubernetes/
 ----
 
 . Make the `cbsbctl` binary executable:
 +
 [source,console]
 ----
-$ chmod +x ./cbsbctl
+$ chmod +x ./cbsbctl.darwin
 ----
 
 . Move the binary into your PATH:
@@ -33,7 +33,7 @@ Linux::
 +
 [source,console]
 ----
-$ cd couchbase-service-broker-kubernetes_x.x.x-linux_x86_64/
+$ cd couchbase-service-broker-kubernetes/
 ----
 
 . Make the `cbsbctl` binary executable:
@@ -58,10 +58,10 @@ Windows::
 +
 [source,console]
 ----
-$ cd couchbase-service-broker-kubernetes_x.x.x-windows_x86_64\
+$ cd couchbase-service-broker-kubernetes\
 ----
 
-. Add the `cbsbctl` binary into your PATH.
+. Add the `cbsbctl.exe` binary into your PATH.
 --
 ====
 // end::cbsbctl[]
