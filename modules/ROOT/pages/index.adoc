@@ -29,14 +29,34 @@ This leads to some key benefits:
 ** Elevated privileges required to provision resources are granted to the Service Broker, not end users
 ** Resources can provisioned in a way where they are hidden from the end user
 
-== What does the Service Broker do?
+== What does the Couchbase Service Broker do?
 
-This implementation of an Open Service Broker works exclusively with Kubernetes resources.
+The Couchbase Service Broker works exclusively with Kubernetes resources.
 Creating service instances and bindings creates Kubernetes resources.
-This is done in a highly abstracted way so the Service Broker can work with any Kubernetes resource type.
+This is done in a highly abstracted way so that the Couchbase Service Broker can work with any Kubernetes resource type.
 
 Resources are templated, so they may be dynamically configured based on a set of inputs.
 These inputs include metadata--provided by the client to provision the instance--and user specified parameters.
+
+image::csb-overview-diagram.png[]
+
+. Let’s say we have a Service Broker created and deployed on the Kubernetes platform.
+
+. Register the Service Broker with the Kubernetes Service Catalog.
+Once the Service Broker is registered with the Kubernetes Service Catalog, users can view the service offerings by listing all the services and service plans provided by different Service Brokers through the service catalog.
+
+. Users will request the creation of the service instance (which means provisioning the service) by selecting one of the listed services and service plans.
+For example, the user selects the service plan ‘Couchbase-default’.
+
+. Once the service is provisioned -- meaning that the service instance is created -- it can be connected to the application or the container pod through a service binding.
+For example, a Couchbase cluster with default configuration will be created/provisioned.
+
+. Once the service is connected with the application, the user can utilize the service and unbind whenever required.
+For example, the application will connect with the Couchbase cluster that was recently provisioned and can be disconnected whenever required.
+
+. The service can then be deleted when needed.
+
+This mechanism balances security and governance with on-demand self-service access to add-on capabilities through a catalog of brokered services.
 
 == Next Steps
 
