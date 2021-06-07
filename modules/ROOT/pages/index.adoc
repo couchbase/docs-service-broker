@@ -42,8 +42,8 @@ image::csb-overview-diagram.png[]
 
 . Let’s say we have a Service Broker created and deployed on the Kubernetes platform.
 
-. Register the Service Broker with the platform.
-Once the Service Broker is registered with the platform (Kubernetes), users can view the service offerings by listing all the services and service plans provided by different Service Brokers through the service catalog.
+. Register the Service Broker with the Kubernetes Service Catalog.
+Once the Service Broker is registered with the Kubernetes Service Catalog, users can view the service offerings by listing all the services and service plans provided by different Service Brokers through the service catalog.
 
 . Users will request the creation of the service instance (which means provisioning the service) by selecting one of the listed services and service plans.
 For example, the user selects the service plan ‘Couchbase-default’.
