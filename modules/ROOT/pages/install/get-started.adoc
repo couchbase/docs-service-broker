@@ -86,7 +86,6 @@ $ kubectl create -f crd.yaml
 
 The included service plans deploy instances of the Autonomous Operator, which has its own dependencies.
 
-
 From the unpacked _Autonomous Operator_ directory, run the following command to install the Autonomous Operator CRD:
 
 [source,console]
@@ -166,7 +165,6 @@ $ kubectl get deployments
 ----
 ----
 NAME                          	 	READY   	UP-TO-DATE   AVAILABLE   	AGE
-couchbase-operator            		 1/1     		1            	1        	33m
 couchbase-operator-admission   		 1/1     		1             1        	37m
 couchbase-service-broker       		 1/1     		1            	1         32m
 ----
@@ -215,6 +213,8 @@ Connection string, username, password, and CA certificate will be in the secret,
 [source,console]
 ----
 $ kubectl get secrets csb
+----
+----
 NAME   TYPE     DATA   AGE
 csb    	Opaque       5      7m58s
 ----

@@ -1,260 +1,205 @@
-= Example: Deploying Couchbase Cluster Locally on Minikube using Couchbase Service Broker
+= Try out the Couchbase Service Broker Locally with Minikube
+include::partial$constants.adoc[]
 
+[abstract]
+Using a local minikube environment, learn how to use the Couchbase Service Broker to deploy a Couchbase cluster and the Couchbase Autonomous Operator.
 
-. Install https://hub.docker.com/editions/community/docker-ce-desktop-mac/[Docker^].
-+ 
-For Minikube with 8GB memory, you must assign 8 GB memory to Docker.
+== Introduction
+
+In this tutorial you'll learn how to use the Couchbase Service Broker to deploy instances of Couchbase clusters and the Couchbase Autonomous Operator.
+
+[[before-you-begin]]
+== Before You Begin
+
+Before you begin this tutorial, you'll need to set up a few things first:
+
+* Install the latest https://hub.docker.com/[Docker Desktop^] release for your current platform.
+You'll need this installed and running in order to install minikube.
+** Make sure to set Docker resource settings to have at least 8 GB (8192 Mi) of memory.
+
+* Install the latest https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl^] for your current platform.
+If `kubectl` is already installed, it gets configured to access the Kubernetes cluster control plane inside minikube when the `minikube start` command is executed.
+** Alternatively, if `kubectl` is not installed locally, you can use the version of `kubectl` included with minikube (after it is installed) by aliasing it as follows:
 +
-When the installation and verification are completed and then access permissions, the status bar displays the Docker whale.
-
-. Install  https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl^].
-+
-[source, bash]
+--
+[source,console]
 ----
-curl -LO "https://storage.googleapis.com/kubernetes-release/release/**$(**curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt**)**/bin/darwin/amd64/kubectl"
-
-chmod +x ./kubectl
-
-sudo mv ./kubectl /usr/local/bin/kubectl
-
-kubectl version –client
+alias kubectl="minikube kubectl --"
 ----
+--
 
-. Install https://brew.sh/[Homebrew^].
-+
-[source, bash]
-----
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-----
+* Install the latest https://svc-cat.io/docs/install/#installing-the-service-catalog-cli[Service Catalog CLI^] for your current platform.
 
-. Install Helm.
-+
-[source, bash]
-----
-$ brew install helm
-----
+* Install the latest https://helm.sh/docs/intro/install/[Helm] release for your current platform.
+You'll be using this to install some necessary dependencies.
 
-. Install https://minikube.sigs.k8s.io/docs/start/[Minikube^]
-+
-[source, bash]
-----
-$ brew install minikube
-----
+* Install the latest https://minikube.sigs.k8s.io/docs/start/[minikube^] for your current platform.
 
-. Create Kubernetes Cluster Using minikube.
-+
+== Create a Local Kubernetes Cluster
+
+With Docker running, create a Kubernetes cluster using minikube.
+
 [source, bash]
 ----
 $ minikube start --cpus 2 --memory 8192
 ----
 
-. Install Service Catalog.
-+
-[source, bash]
-----
-$ helm repo add svc-cat https://svc-catalog-charts.storage.googleapis.com
+If you encounter error about not having enough memory, make sure that you've set Docker resources to at least 8 GB of memory.
 
+== Install the Service Catalog
+
+Now that you have a single-node Kubernetes cluster running on your computer, it's time to https://kubernetes.io/docs/tasks/service-catalog/install-service-catalog-using-helm/[install the service catalog using Helm].
+
+Start by adding the service-catalog Helm repository:
+
+[source,console]
+----
+$ helm repo add svc-cat https://kubernetes-sigs.github.io/service-catalog
+----
+
+You can verify the installation with the following command:
+
+[source,console]
+----
 $ helm search repo service-catalog
-
-$ kubectl create namespace catalog
-
-$ helm install catalog svc-cat/catalog --namespace catalog
-
-$ brew update
-
-$ brew install kubernetes-service-catalog-client
+----
+----
+NAME                	CHART VERSION	APP VERSION	DESCRIPTION                                       
+svc-cat/catalog     	0.3.1        	           	service-catalog webhook server and controller-m...
+svc-cat/catalog-v0.2	0.2.3        	           	service-catalog API server and controller-manag...
 ----
 
-. Install xref:operator::install-kubernetes.adoc[Couchbase Autonomous Operator].
+Now that the chart repository has been added, it's time to install the chart.
 
-.. Download the Couchbase Autonomous Operator package.
-
-.. Extract the downloaded package.
-+
-[source,bash]
+[source,console]
 ----
-$ sudo tar xf couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64.zip
-
-$ cd couchbase-autonomous-operator-kubernetes_2.1.0-macos-x86_64
+$ helm install catalog svc-cat/catalog --namespace catalog --create-namespace
 ----
 
-.. From the extracted directory, run the following commands. Note that the following code snippets also display the sample output. 
-+
-[source,bash]
-----
-$ kubectl create -f crd.yaml
+== Download and Install Service Broker Dependencies
 
-*Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition*
+Before you can proceed with rest of the steps in this guide, you'll need to download the necessary packages from https://www.couchbase.com/downloads[couchbase.com/downloads^].
 
-customresourcedefinition.apiextensions.k8s.io/couchbaseautoscalers.couchbase.com created
+Please download the following packages:
 
-customresourcedefinition.apiextensions.k8s.io/couchbasebackuprestores.couchbase.com created
+* *Couchbase Service Broker {service-broker-version-minor}*
+* *Couchbase Autonomous Operator 2.2*
 
-customresourcedefinition.apiextensions.k8s.io/couchbasebackups.couchbase.com created
+Both of these packages contain YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
 
-customresourcedefinition.apiextensions.k8s.io/couchbasebuckets.couchbase.com created
+IMPORTANT: Make sure to unpack these packages on the same computer where you normally run `kubectl`.
 
-customresourcedefinition.apiextensions.k8s.io/couchbaseclusters.couchbase.com created
+=== Install `cbopcfg`
 
-customresourcedefinition.apiextensions.k8s.io/couchbaseephemeralbuckets.couchbase.com created
+The Couchbase _Autonomous Operator_ package includes a command-line tool named `cbsbctl`, which is used to install certain dependencies for the Autonomous Operator.
+Use the steps below to install `cbopcfg` on your platform of choice.
 
-customresourcedefinition.apiextensions.k8s.io/couchbasegroups.couchbase.com created
+include::partial$tools-install.adoc[tags=cbopcfg]
 
-customresourcedefinition.apiextensions.k8s.io/couchbasememcachedbuckets.couchbase.com created
+=== Install the Autonomous Operator CRDs and Dynamic Admission Controller
 
-customresourcedefinition.apiextensions.k8s.io/couchbasereplications.couchbase.com created
+The included service plans deploy instances of the Autonomous Operator, which has its own dependencies.
 
-customresourcedefinition.apiextensions.k8s.io/couchbaserolebindings.couchbase.com created
+From the unpacked _Autonomous Operator_ directory, run the following command to install the Autonomous Operator CRD:
 
-customresourcedefinition.apiextensions.k8s.io/couchbaseusers.couchbase.com created
-----
-+
-[source,bash]
-----
-$ bin/cbopcfg generate admission | kubectl create -f -
-
-serviceaccount/couchbase-operator-admission created
-
-clusterrole.rbac.authorization.k8s.io/couchbase-operator-admission created
-
-clusterrolebinding.rbac.authorization.k8s.io/couchbase-operator-admission created
-
-secret/couchbase-operator-admission created
-
-deployment.apps/couchbase-operator-admission created
-
-service/couchbase-operator-admission created
-
-*Warning: admissionregistration.k8s.io/v1beta1 MutatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 MutatingWebhookConfiguration*
-
-mutatingwebhookconfiguration.admissionregistration.k8s.io/couchbase-operator-admission created
-
-*Warning: admissionregistration.k8s.io/v1beta1 ValidatingWebhookConfiguration is deprecated in v1.16+, unavailable in v1.22+; use admissionregistration.k8s.io/v1 ValidatingWebhookConfiguration*
-
-validatingwebhookconfiguration.admissionregistration.k8s.io/couchbase-operator-admission created
-----
-+
-[source,bash]
-----
-$ bin/cbopcfg generate operator --scope cluster | kubectl create -f -
-
-serviceaccount/couchbase-operator created
-
-clusterrole.rbac.authorization.k8s.io/couchbase-operator created
-
-clusterrolebinding.rbac.authorization.k8s.io/couchbase-operator created
-
-deployment.apps/couchbase-operator created
-
-service/couchbase-operator created
-----
-
-. Install Couchbase Service Broker.
-+
-[source,bash]
+[source,console]
 ----
 $ kubectl create -f crd.yaml
-
-Warning: apiextensions.k8s.io/v1beta1 CustomResourceDefinition is deprecated in v1.16+, unavailable in v1.22+; use apiextensions.k8s.io/v1 CustomResourceDefinition
-
-customresourcedefinition.apiextensions.k8s.io/servicebrokerconfigs.servicebroker.couchbase.com created
 ----
-+
-[source,bash]
+
+Next, run the following command to install the dynamic admission controller (DAC) into the `default` namespace.
+
+[source,console]
 ----
-$ kubectl create -f servicebrokerconfig.yaml
-
-role.rbac.authorization.k8s.io/couchbase-service-broker created
-
-servicebrokerconfig.servicebroker.couchbase.com/couchbase-service-broker created
+$ cbopcfg create admission
 ----
-+
-[source,bash]
+
+=== Install `cbcsctl`
+
+The Couchbase _Service Broker_ package includes a command-line tool named `cbsbctl`, which is used during installation.
+Use the steps below to install `cbsbctl` on your platform of choice.
+
+include::partial$tools-install.adoc[tags=cbsbctl]
+
+=== Install the Service Broker CRD
+
+The Service Broker is configured using a Kubernetes custom resource that allows type checking of your configurations.
+In order to use this custom resource, you must install the custom resource definition (CRD) that is included in the Service Broker package download.
+
+From the unpacked _Service Broker_ directory:
+
+[source,console]
 ----
-$ kubectl create -f broker.yaml -- wait
-
-serviceaccount/couchbase-service-broker created
-
-rolebinding.rbac.authorization.k8s.io/couchbase-service-broker created
-
-secret/couchbase-service-broker created
-
-deployment.apps/couchbase-service-broker created
-
-service/couchbase-service-broker created
-
-clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
+$ kubectl create -f crd.yaml
 ----
-+
-[source,bash]
+
+== Install the Service Broker
+
+The Service Broker can be installed at the namespace level or the cluster level.
+For the purposes of this tutorial, we'll be installing the Service Broker at the cluster level.
+
+From the unpacked _Service Broker_ directory:
+
+[source,console]
 ----
-$ kubectl create -f clusterservicebroker.yaml
-
-clusterservicebroker.servicecatalog.k8s.io/couchbase-service-broker created
+$ ./cbsbctl create clusterservicebroker --profile demo
 ----
-+
-[source,bash]
+
+You can run the following command to check the status of the Service Broker:
+
+[source,console]
 ----
-$ svcat provision csb --class couchbase-osb-service --plan csb-basic --param password=password –-wait
+$ kubectl get deployments
+----
+----
+NAME                          	 	READY   	UP-TO-DATE   AVAILABLE   	AGE
+couchbase-operator-admission   		 1/1     		1             1        	37m
+couchbase-service-broker       		 1/1     		1            	1         32m
+----
 
-Waiting for the instance to be provisioned...
+== Provision the Couchbase Cluster Service
 
-    Name:           csb                                                                            
+The following command deploys a three-node cluster (by default), with a Bucket, and an Administrator user with a password.
 
-    Namespace:      default                                                                            
+[source,console]
+----
+$ svcat provision csb --class cao-2.2-service --plan csb-basic --param password=password --wait
+----
 
-    Status:         Ready - The instance was provisioned successfully @ 2020-11-23 10:05:25 +0000 UTC  
+== Bind to the Provisioned Service
 
-    DashboardURL:   https://couchbase-instance-c08r083o.default:18091
-
-    Class: 8522e991-07bc-4225-a859-1eec1e333153
-
-Plan: ec0f2c9b-0277-46d7-985f-ba1fbf3b068d
-
- 
-
-Parameters:
-
-    password: password
----- 
-+
-You will end up with a 3 node cluster (by default), with a Bucket, an Administrator user with the password you provided. You can then bind to it:
-+
-[source,bash]
+[source,console]
 ----
 $ svcat bind csb
+----
+----
+Name:        csb
+    Namespace:   default
+    Status:
+    Secret:      csb
+    Instance:    csb
 
-Name:        csb  
+  Parameters:
+    No parameters defined
+----
 
-    Namespace:   default  
+This will create a user and allow access to the bucket.
+Connection string, username, password, and CA certificate will be in the secret, ready to be used by a client of some variety.
 
-    Status:               
-
-    Secret:      csb  
-
-    Instance:    csb  
-
-  
-
-  Parameters:
-
-    No parameters defined
-----   
-+
-[source,bash]
+[source,console]
 ----
 $ kubectl get secrets csb
-
-NAME TYPE DATA AGE
-
-csb Opaque 5 7m58s
+----
+----
+NAME   TYPE     DATA   AGE
+csb    	Opaque       5      7m58s
 ----
 
-. To access the Couchbase Cluster Admin UI console:
-+
-[source,bash]
+To access the Couchbase Web Console:
+
+[source,console]
 ----
 $ kubectl port-forward couchbase-instance-winhhoku-0000 8091
 ----
-+
-Go to http://localhost:8091 and login with user name `Administrator` and password as `password`.
+
+Go to `http://localhost:8091` and login with the credentials used when provisioning the Couchbase cluster service.
