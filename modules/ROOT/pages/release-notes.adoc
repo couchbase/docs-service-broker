@@ -46,13 +46,13 @@ These service classes are provided on either a per-namespace or global basis.
 NOTE: The `couchbase-autonomous-operator` class is not meant to be used directly, but is instead instantiated by the `cao` plans.
 This design maintains a separation between Couchbase custom resources and the Autonomous Operator itself.
 
-For more information, refer to the xref:install:get-started.adoc[Getting Started] guide.
+For more information, refer to the xref:install/get-started.adoc[Getting Started] guide.
 
 ==== New Tool: `cbsbctl`
 
 The Couchbase Service Broker https://www.couchbase.com/downloads[package^] now ships with a new command-line binary tool: `cbsbctl`.
 Binaries for Linux, Windows, and macOS are provided.
-This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:install:get-started.adoc[Getting Started] guide.
+This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:install/get-started.adoc[Getting Started] guide.
 
 Refer to the xref:reference:tools/cbsbctl.adoc[`cbsbctl` reference page] for detailed command usage information.
 
