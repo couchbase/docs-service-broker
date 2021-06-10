@@ -62,7 +62,7 @@ This mechanism balances security and governance with on-demand self-service acce
 
 To fully understand how the Service Broker works, and its capabilities, we suggest you read the following sections:
 
-* The xref:install/index.adoc[Getting Started] section describes how to install and configure the Service Broker.
+* The xref:install/get-started.adoc[Getting Started] section describes how to install and configure the Service Broker.
   The best way to understand how to use service brokers is by example.
   Using the provided example configuration files it will demonstrate the ease of deployment of a service for an end user and how to consume services as an application.
 * The xref:concepts/index.adoc[Concepts] section describes the architecture of the Service Broker.
