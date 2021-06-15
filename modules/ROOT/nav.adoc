@@ -24,5 +24,3 @@
 ** xref:reference/osb-api.adoc[Open Service Broker API Reference]
 
 * xref:release-notes.adoc[Release Notes]
-
-* xref:cloud-native-database::index.adoc[Go to Cloud-Native Database Documentation]
