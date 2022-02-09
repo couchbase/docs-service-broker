@@ -17,7 +17,7 @@ This section describes the platform and software requirements for running the Se
 
 The following platforms are supported:
 
-* Kubernetes 1.17+
+* Kubernetes 1.17-1.21
 ** Includes managed Kubernetes platforms AWS EKS, Azure AKS, and Google GKE
 
 In general, any Kubernetes distribution based on a supported version should work.
