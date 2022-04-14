@@ -42,7 +42,7 @@ Before you can proceed with rest of the steps in this guide, you'll need to down
 Please download the following packages:
 
 * *Couchbase Service Broker {service-broker-version-minor}*
-* *Couchbase Autonomous Operator 2.1 or 2.2*
+* *Couchbase Autonomous Operator 2.1, 2.2, or 2.3*
 
 Both of these packages contain YAML configuration files and command-line tools that you will use to install the Couchbase Service Broker and Couchbase Clusters.
 
