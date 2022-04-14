@@ -9,24 +9,26 @@ For installation instructions, refer to:
 
 * xref:install/get-started.adoc[]
 
-[#release-v110]
-== Release 1.1.0
+[#release-v120]
+== Release 1.2.0
 
-Couchbase Service Broker 1.1.0 was released in June 2021.
+Couchbase Service Broker 1.2.0 was released in April 2022.
 
-[#supported-platforms-v110]
+[#supported-platforms-v120]
 === Platform Support
 
-No changes in platform support have been made in Couchbase Service Broker 1.1.0.
+Couchbase Service Broker 1.2.0 supports Kubernetes 1.17-1.21, including managed Kubernetes platforms AWS EKS, Azure AKS, and Google GKE.
+
+Note that Red Hat OpenShift is not supported, as Template Service Broker and Service Catalog have been deprecated and removed from the latest OpenShift releases.
 
 For a list of currently supported platforms, refer to xref:install/get-started.adoc#prerequisites[Prerequisites].
 
-[#changes-in-behavior-v110]
+[#changes-in-behavior-v120]
 === Major Behavior Changes and Enhancements
 
 ==== New Service Classes
 
-Couchbase Service Broker 1.1.0 provides the following service classes:
+Couchbase Service Broker 1.2.0 provides the following service classes:
 
 * Class: `cao-2.1-service`
 ** Plan: `csb-basic`
@@ -36,9 +38,15 @@ Couchbase Service Broker 1.1.0 provides the following service classes:
 ** Plan: `csb-basic`
 ** Plan: `csb-standard`
 
+* Class: `cao-2.3-service`
+** Plan: `csb-basic`
+** Plan: `csb-standard`
+
 * Class: `couchbase-autonomous-operator`
 ** Plan: `2.1.0`
 ** Plan: `2.2.0`
+** Plan: `2.3.0`
+
 
 Each `cao` service class has two service plans -- `csb-basic` and `csb-standard` -- for its respective version of the Autonomous Operator.
 These service classes are provided on either a per-namespace or global basis.
@@ -47,29 +55,6 @@ NOTE: The `couchbase-autonomous-operator` class is not meant to be used directly
 This design maintains a separation between Couchbase custom resources and the Autonomous Operator itself.
 
 For more information, refer to the xref:install/get-started.adoc[Getting Started] guide.
-
-==== New Tool: `cbsbctl`
-
-The Couchbase Service Broker https://www.couchbase.com/downloads[package^] now ships with a new command-line binary tool: `cbsbctl`.
-Binaries for Linux, Windows, and macOS are provided.
-This tool can be used to automate several parts of the deployment process, and is now incorporated into the xref:install/get-started.adoc[Getting Started] guide.
-
-Refer to the xref:reference:tools/cbsbctl.adoc[`cbsbctl` reference page] for detailed command usage information.
-
-==== Other Notable Changes
-
-* https://github.com/couchbase/service-broker/issues/52[#52^] Advanced Templating (loops)
-
-* https://github.com/couchbase/service-broker/issues/48[#48^] More template filters
-
-[#bug-issues-v110]
-=== Bug Fixes
-
-* https://github.com/couchbase/service-broker/issues/49[#49^] Deprovisioning fails on client-side when using eden
-
-== Providing Feedback
-
-You can have a big impact on future versions of the Couchbase Autonomous Operator (and its documentation) by providing Couchbase with your direct feedback and observations. Please feel free to post your questions and comments on https://forums.couchbase.com/c/couchbase-server/Kubernetes[Couchbase Forums^].
 
 == Licenses for Third-Party Components
 
