@@ -1,4 +1,4 @@
-= Release Notes for Couchbase Service Broker {service-broker-version-minor}
+= Release Notes for Couchbase Service Broker 1.2
 include::partial$constants.adoc[]
 
 The Couchbase Service Broker provides native integration of the Couchbase Autonomous Operator with the https://www.openservicebrokerapi.org/[Open Service Broker API^] for Open Source Kubernetes .
